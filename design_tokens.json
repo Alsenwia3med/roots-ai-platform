@@ -1,0 +1,24 @@
+{
+  "color": {
+    "primary": "#0A192F",
+    "accent": "#00E5FF",
+    "surface": "#0F233D",
+    "background": "#040D1A",
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#94A3B8"
+    },
+    "domains": {
+      "HU": "#D97706",
+      "SL": "#2563EB",
+      "ME": "#0D9488",
+      "CI": "#EF4444",
+      "SA": "#10B981",
+      "ST": "#F97316",
+      "IN": "#8B5CF6"
+    }
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, sans-serif"
+  }
+}

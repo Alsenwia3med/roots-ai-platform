@@ -1,0 +1,10 @@
+{
+  "screens": [
+    {
+      "id": "PUB-01",
+      "route": "/",
+      "title": "Golden Screen - Public Landing & Platform Overview",
+      "status": "APPROVED_GATE_BASELINE"
+    }
+  ]
+}
