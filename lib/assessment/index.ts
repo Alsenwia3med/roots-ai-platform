@@ -12,4 +12,5 @@ export * from "./answer-types";
 export * from "./scoring-types";
 export * from "./question-bank";
 export * from "./scoring-rules";
+export * from "./scoring-engine";
 export * from "./invariants";

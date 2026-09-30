@@ -96,12 +96,11 @@ We checked this directly against the controlled C-02 v1.0.1 CORRECTED source (wo
 
 **Current implementation behaviour (unchanged).** A value takes the highest band whose minimum it has reached (74.5 → Moderate, 75.0 → High). We are not presenting this as a controlled rule.
 
-**ROOTS decision requested.** Please confirm which rule applies:
-- **(a)** classify the one-decimal value: a value takes the band whose minimum it has reached (current behaviour; 74.5 → Moderate);
-- **(b)** classify the value after rounding half-away-from-zero to an integer (74.5 → High, 74.4 → Moderate);
-- **(c)** another rule specified by ROOTS.
+**ROOTS decision (30 September 2026).** ROOTS selected **(a)**: classify the retained one-decimal value by the highest inclusive band minimum reached. Therefore 74.5 → Moderate and 75.0 → High. This decision controls Recovery Potential classification only; it does not change the numeric Recovery Potential output or any other score.
 
-We will implement exactly the rule ROOTS confirms, with a test at each boundary.
+**Implemented and verified in this checkout.** `classifyScore("RECOVERY", value)` follows this rule. Boundary tests cover 24.9/25, 49.9/50 and 74.5/75; all 30 canonical C-02 Golden Tests also pass exactly. The rule is ROOTS' implementation decision; C-02 itself still states whole-number inclusive bands and one-decimal Recovery output.
+
+**Remaining scope note.** Golden scoring verification does not close the M1 persistence conflicts recorded in `M2_OPEN_ITEMS.md` (domain code constraints and nullable score columns).
 
 ---
 

@@ -15,6 +15,7 @@
 
 import {
   BIO_STATE_DOMAIN_TOTAL,
+  BIO_STATE_MIN_VALID_DOMAINS,
   CANONICAL_FIRST_QUESTION_NUMBER,
   CANONICAL_LAST_QUESTION_NUMBER,
   CANONICAL_MODULE_COUNT,
@@ -39,9 +40,9 @@ import type { CanonicalDomainCode } from "./canonical-constants";
 import type { QuestionDefinition } from "./types";
 
 /**
- * "SOURCE_UNPOPULATED" is the honest state of this repository today: the
- * controlled C-01 / C-02 files have not been provided. Every other code is a
- * transcription defect that can only appear after they have been.
+ * SOURCE_UNPOPULATED remains a fail-closed state for incomplete or missing
+ * generated controlled tables. With C-01/C-02 present, every other code reports
+ * a transcription or relationship defect that the caller must treat as blocking.
  */
 export type StructureViolationCode =
   | "SOURCE_UNPOPULATED"
@@ -170,12 +171,8 @@ export function validateC01(): readonly StructureViolation[] {
       out.push(v("DOMAIN_MEMBERSHIP", q.questionId, "scored question has no domainCode"));
     }
     if (q.eligibility === "contextual") {
-      // Blueprint §1: contextual questions are displayed, collected and required —
-      // they are excluded from the calculation, never from the questionnaire.
-      if (q.requirement !== "required") {
-        out.push(v("CONTEXTUAL_COUNT", q.questionId,
-          "contextual question must be required — §1 keeps all 33 in the required total of 71"));
-      }
+      // Contextual answers do not enter scoring. Requirement is a separate axis:
+      // C-01 makes Q5 and Q73 optional even though both are contextual.
       if (q.domainCode !== null) {
         out.push(v("DOMAIN_MEMBERSHIP", q.questionId,
           `contextual question must not carry domainCode ${q.domainCode} — it would enter the calculation`));
@@ -204,11 +201,11 @@ export function validateC01Options(): readonly StructureViolation[] {
 
   for (const q of QUESTION_BANK.questions) {
     // Exactly the five Blueprint questions are multi-select — no more, no less.
-    const isMulti = q.responseKind === "multiple_select";
+    const isMulti = q.responseKind === "multi_select";
     if (isMulti !== multiSelectIds.has(q.questionId)) {
       out.push(v("MULTI_SELECT_SET", q.questionId, isMulti
         ? "is multi-select but is not one of the canonical five (Q13, Q14, Q52, Q53, Q54)"
-        : "is one of the canonical multi-select questions but responseKind is not multiple_select"));
+        : "is one of the canonical multi-select questions but responseKind is not multi_select"));
     }
     if (isMulti && q.multiSelectRule === null) {
       out.push(v("MULTI_SELECT_RULE", q.questionId, "multi-select question has no multiSelectRule"));
@@ -359,7 +356,7 @@ export function validateC02(): readonly StructureViolation[] {
   // Structural constants must still equal the Blueprint's.
   const structural: readonly [string, number, number][] = [
     ["domainCoverageMinRatio", SCORING_RULES.domainCoverageMinRatio, DOMAIN_COVERAGE_MIN_RATIO],
-    ["bioStateMinValidDomains", SCORING_RULES.bioStateMinValidDomains, BIO_STATE_DOMAIN_TOTAL],
+    ["bioStateMinValidDomains", SCORING_RULES.bioStateMinValidDomains, BIO_STATE_MIN_VALID_DOMAINS],
     ["driverEligibility.coPrimaryMaxGap", SCORING_RULES.driverEligibility.coPrimaryMaxGap, 3],
     ["rawBurdenScale.min", SCORING_RULES.rawBurdenScale.min, RAW_BURDEN_SCALE.min],
     ["rawBurdenScale.max", SCORING_RULES.rawBurdenScale.max, RAW_BURDEN_SCALE.max],

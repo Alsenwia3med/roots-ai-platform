@@ -224,6 +224,7 @@ const optionsBySet = new Map();
 for (const o of optionSets) {
   if (!optionsBySet.has(o.option_set_id)) optionsBySet.set(o.option_set_id, []);
   optionsBySet.get(o.option_set_id).push(o);
+  setIds.add(o.option_set_id);
   if (!["0", "1"].includes(o.is_na)) {
     fail(`C-01 Option_Sets ${o.option_set_id}/${o.option_id}: is_na must be 0 or 1`);
   }
@@ -437,21 +438,21 @@ expect(
   formulas.map((f) => f.rule_id).join(",") === "SC-001,SC-002,SC-003,SC-004,SC-005,SC-006,SC-007,SC-008",
   `C-02 Formulas must be SC-001..SC-008 — found ${formulas.map((f) => f.rule_id).join(",")}`,
 );
-assertRuleText(formulaById.get("SC-001") || {}, ["\u03a3(points \u00d7 weight)", "\u03a3(4 \u00d7 weight)"], "SC-001 normative_formula");
+assertRuleText((formulaById.get("SC-001") || {}).normative_formula, ["\u03a3(points \u00d7 weight)", "\u03a3(4 \u00d7 weight)"], "SC-001 normative_formula");
 assertRuleText((formulaById.get("SC-001") || {}).null_or_boundary_rule, ["0.50"], "SC-001 null_or_boundary_rule");
 assertRuleText((formulaById.get("SC-001") || {}).rounding, ["Half away from zero to integer"], "SC-001 rounding");
-assertRuleText(formulaById.get("SC-002") || {}, ["Mean of available seven domain scores"], "SC-002 normative_formula");
+assertRuleText((formulaById.get("SC-002") || {}).normative_formula, ["Mean of available seven domain scores"], "SC-002 normative_formula");
 assertRuleText((formulaById.get("SC-002") || {}).null_or_boundary_rule, ["fewer than 5 domains"], "SC-002 null_or_boundary_rule");
-assertRuleText(formulaById.get("SC-003") || {}, ["Biological State \u00d7 0.5"], "SC-003 normative_formula");
+assertRuleText((formulaById.get("SC-003") || {}).normative_formula, ["Biological State \u00d7 0.5"], "SC-003 normative_formula");
 assertRuleText((formulaById.get("SC-003") || {}).null_or_boundary_rule, ["clamp 0-100"], "SC-003 null_or_boundary_rule");
 assertRuleText((formulaById.get("SC-003") || {}).rounding, ["One decimal"], "SC-003 rounding");
-assertRuleText(formulaById.get("SC-004") || {}, ["20 \u00d7 count of active P1-P5"], "SC-004 normative_formula");
-assertRuleText(formulaById.get("SC-005") || {}, ["0.30", "0.25", "0.20", "0.15", "0.10"], "SC-005 normative_formula");
+assertRuleText((formulaById.get("SC-004") || {}).normative_formula, ["20 \u00d7 count of active P1-P5"], "SC-004 normative_formula");
+assertRuleText((formulaById.get("SC-005") || {}).normative_formula, ["0.30", "0.25", "0.20", "0.15", "0.10"], "SC-005 normative_formula");
 assertRuleText((formulaById.get("SC-005") || {}).rounding, ["One decimal"], "SC-005 rounding");
-assertRuleText(formulaById.get("SC-006") || {}, ["Answered scored items", "eligible scored items"], "SC-006 normative_formula");
-assertRuleText(formulaById.get("SC-007") || {}, ["populationSD(points)/2"], "SC-007 normative_formula");
+assertRuleText((formulaById.get("SC-006") || {}).normative_formula, ["Answered scored items", "eligible scored items"], "SC-006 normative_formula");
+assertRuleText((formulaById.get("SC-007") || {}).normative_formula, ["populationSD(points)/2"], "SC-007 normative_formula");
 assertRuleText(
-  formulaById.get("SC-008") || {},
+  (formulaById.get("SC-008") || {}).normative_formula,
   ["0.50\u00d7overall coverage", "0.30\u00d7Q72 value", "0.20\u00d7mean available-domain consistency"],
   "SC-008 normative_formula",
 );
@@ -614,19 +615,93 @@ if (failures.length > 0) {
   console.error(`TRANSCRIPTION BLOCKED — ${failures.length} problem(s) reading the controlled sources:\n`);
   for (const f of failures) console.error("  - " + f);
   console.error("\nNo file was written. Fix the source or the reader; do not hand-edit the output.");
+  process.exit(1);
+}
 
 /* --------------------------------- emitting --------------------------------- */
 
-const C01_SHEETS = ["Modules", "Questions", "Option_Sets", "Validation"];
-const C02_SHEETS = [
-  "Domains",
-  "Question_Mapping",
-  "Option_Points",
-  "Formulas",
-  "Protective_Factors",
-  "Classifications",
-  "Drivers_Evidence",
-  "Golden_Tests",
+/**
+ * The sheets transcribed into c01-rows.ts, in the order they are emitted.
+ * `type`/`const` are the TypeScript names the sheet becomes; `doc` is the
+ * one-line description above the generated interface.
+ */
+const C01_TABLES = [
+  {
+    sheet: "Modules",
+    type: "C01ModuleRow",
+    const: "C01_MODULE_ROWS",
+    doc: "One module of the questionnaire.",
+  },
+  {
+    sheet: "Questions",
+    type: "C01QuestionRow",
+    const: "C01_QUESTION_ROWS",
+    doc: "One question, in questionnaire order.",
+  },
+  {
+    sheet: "Option_Sets",
+    type: "C01OptionRow",
+    const: "C01_OPTION_SET_ROWS",
+    doc: "One option of a shared option set.",
+  },
+  {
+    sheet: "Validation",
+    type: "C01ValidationRow",
+    const: "C01_VALIDATION_ROWS",
+    doc: "One validation rule stated by the source.",
+  },
+];
+
+/** The sheets transcribed into c02-rows.ts, in the order they are emitted. */
+const C02_TABLES = [
+  {
+    sheet: "Domains",
+    type: "C02DomainRow",
+    const: "C02_DOMAIN_ROWS",
+    doc: "One of the seven burden domains.",
+  },
+  {
+    sheet: "Question_Mapping",
+    type: "C02QuestionMapRow",
+    const: "C02_QUESTION_MAP_ROWS",
+    doc: "One scored question and the domain it feeds.",
+  },
+  {
+    sheet: "Option_Points",
+    type: "C02OptionPointRow",
+    const: "C02_OPTION_POINT_ROWS",
+    doc: "One option and the burden points it contributes.",
+  },
+  {
+    sheet: "Formulas",
+    type: "C02FormulaRow",
+    const: "C02_FORMULA_ROWS",
+    doc: "One normative scoring rule (SC-001..SC-008).",
+  },
+  {
+    sheet: "Protective_Factors",
+    type: "C02ProtectiveRow",
+    const: "C02_PROTECTIVE_ROWS",
+    doc: "One protective factor or recovery modifier.",
+  },
+  {
+    sheet: "Classifications",
+    type: "C02ClassificationRow",
+    const: "C02_CLASSIFICATION_ROWS",
+    doc: "One classification band of one scale.",
+  },
+  {
+    sheet: "Drivers_Evidence",
+    type: "C02DriverRuleRow",
+    const: "C02_DRIVER_RULE_ROWS",
+    doc: "One driver or evidence-selection rule.",
+  },
+  {
+    sheet: "Golden_Tests",
+    type: "C02GoldenTestRow",
+    const: "C02_GOLDEN_TEST_ROWS",
+    doc: "One normative input/output pair the engine must reproduce.",
+  },
 ];
 
 function sheetOf(workbook, name) {
@@ -673,24 +748,39 @@ function interfaceOf(typeName, doc, columns) {
   );
 }
 
-/** One emitted table: sheet name -> TypeScript type + const, verbatim cells. */
-function rowsFile(workbook, title, note, blocks) {
-  let out = header(title, workbook, note);
-  for (const b of blocks) {
-    const s = sheetOf(workbook, b.sheet);
-    out += `/* ---- sheet "${b.sheet}" (header row ${s.headerRow}, ${s.rows.length} data rows) ---- */\n\n`;
-    out += interfaceOf(b.type, b.doc, s.columns) + "\n";
-    const body = s.rows.map((r) => "  " + JSON.stringify(r) + ",");
-    out += `export const ${b.const}: readonly ${b.type}[] = [\n${body.join("\n")}\n];\n\n`;
-  }
-  return out;
+/**
+ * One emitted table: the sheet's own header line, a row interface keyed by the
+ * sheet's own column names, and the data rows as objects in source order.
+ *
+ * Objects rather than positional tuples on purpose: a consumer writes
+ * `row.question_id`, so a column that moves position in a future C-01/C-02
+ * revision cannot silently re-point a field at a different column — the
+ * interface and the key lookups fail loudly instead.
+ */
+function tableOf(s, typeName, doc, constName) {
+  const body = s.rows
+    .map((r) => {
+      const o = {};
+      s.columns.forEach((c, i) => {
+        o[c] = r[i] ?? "";
+      });
+      return "  " + JSON.stringify(o);
+    })
+    .join(",\n");
+  return (
+    `/* ---- sheet "${s.name}" (header row ${s.headerRow}, ${s.rows.length} data rows) ---- */\n\n` +
+    interfaceOf(typeName, doc, s.columns) +
+    "\n" +
+    `export const ${constName}: readonly ${typeName}[] = [\n${body}\n];\n\n`
+  );
 }
 
 const written = [];
 function write(name, body) {
   mkdirSync(OUT_DIR, { recursive: true });
-  writeFileSync(resolve(OUT_DIR, name), body, "utf8");
-  written.push([name, body]);
+  const normalizedBody = body.trimEnd() + "\n";
+  writeFileSync(resolve(OUT_DIR, name), normalizedBody, "utf8");
+  written.push([name, normalizedBody]);
 }
 
 write(
@@ -709,31 +799,7 @@ write(
       " */",
       "",
     ].join("\n") +
-    C01_SHEETS.map((sheetName) => {
-      const s = sheetOf(c01, sheetName);
-      const typeName = {
-        Modules: "C01ModuleRow",
-        Questions: "C01QuestionRow",
-        Option_Sets: "C01OptionRow",
-        Validation: "C01ValidationRow",
-      }[sheetName];
-      const constName = {
-        Modules: "C01_MODULE_ROWS",
-        Questions: "C01_QUESTION_ROWS",
-        Option_Sets: "C01_OPTION_SET_ROWS",
-        Validation: "C01_VALIDATION_ROWS",
-      }[sheetName];
-      const doc = {
-        Modules: "One module of the questionnaire.",
-        Questions: "One question, in questionnaire order.",
-        Option_Sets: "One option of a shared option set.",
-        Validation: "One validation rule stated by the source.",
-      }[sheetName];
-      let out = `/* ---- sheet "${sheetName}" (header row ${s.headerRow}, ${s.rows.length} data rows) ---- */\n\n`;
-      out += interfaceOf(typeName, doc, s.columns) + "\n";
-      const body = s.rows.map((r) => "  " + JSON.stringify(r) + ",");
-      return out + `export const ${constName}: readonly ${typeName}[] = [\n${body.join("\n")}\n];\n\n`;
-    }).join(""),
+    C01_TABLES.map((t) => tableOf(sheetOf(c01, t.sheet), t.type, t.doc, t.const)).join(""),
 );
 
 write(
@@ -752,43 +818,7 @@ write(
       " */",
       "",
     ].join("\n") +
-    C02_SHEETS.map((sheetName) => {
-      const s = sheetOf(c02, sheetName);
-      const typeName = {
-        Domains: "C02DomainRow",
-        Question_Mapping: "C02QuestionMapRow",
-        Option_Points: "C02OptionPointRow",
-        Formulas: "C02FormulaRow",
-        Protective_Factors: "C02ProtectiveRow",
-        Classifications: "C02ClassificationRow",
-        Drivers_Evidence: "C02DriverRuleRow",
-        Golden_Tests: "C02GoldenTestRow",
-      }[sheetName];
-      const constName = {
-        Domains: "C02_DOMAIN_ROWS",
-        Question_Mapping: "C02_QUESTION_MAP_ROWS",
-        Option_Points: "C02_OPTION_POINT_ROWS",
-        Formulas: "C02_FORMULA_ROWS",
-        Protective_Factors: "C02_PROTECTIVE_ROWS",
-        Classifications: "C02_CLASSIFICATION_ROWS",
-        Drivers_Evidence: "C02_DRIVER_RULE_ROWS",
-        Golden_Tests: "C02_GOLDEN_TEST_ROWS",
-      }[sheetName];
-      const doc = {
-        Domains: "One of the seven burden domains.",
-        Question_Mapping: "One scored question and the domain it feeds.",
-        Option_Points: "One option and the burden points it contributes.",
-        Formulas: "One normative scoring rule (SC-001..SC-008).",
-        Protective_Factors: "One protective factor or recovery modifier.",
-        Classifications: "One classification band of one scale.",
-        Drivers_Evidence: "One driver or evidence-selection rule.",
-        Golden_Tests: "One normative input/output pair the engine must reproduce.",
-      }[sheetName];
-      let out = `/* ---- sheet "${sheetName}" (header row ${s.headerRow}, ${s.rows.length} data rows) ---- */\n\n`;
-      out += interfaceOf(typeName, doc, s.columns) + "\n";
-      const body = s.rows.map((r) => "  " + JSON.stringify(r) + ",");
-      return out + `export const ${constName}: readonly ${typeName}[] = [\n${body.join("\n")}\n];\n\n`;
-    }).join(""),
+    C02_TABLES.map((t) => tableOf(sheetOf(c02, t.sheet), t.type, t.doc, t.const)).join(""),
 );
 
 /* ---------------------------- provenance + index ---------------------------- */

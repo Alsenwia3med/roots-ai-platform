@@ -50,20 +50,29 @@ export type ScoringEligibility = "scored" | "contextual";
 export type NaPolicy = "not_permitted" | "explicit_only";
 
 /* ---------------------------------------------------------------------------
- * 4. Response kinds
- *  ⚠ PENDING C-01: the definitive set of response types used by the controlled
- *    bank is not yet confirmed. This union covers what the Blueprint names
- *    explicitly (multi-select §2, free text §2) plus the single-select, numeric
- *    and boolean shapes a 0.0–4.0 burden scale implies. Trim or extend it once
- *    C-01 is loaded: a member the controlled bank never uses should be removed
- *    rather than silently kept as dead vocabulary.
+ * 4. Response kinds — the eight codes C-01 v1.0.1 writes in its own
+ *    `question_type` column, with the counts that sheet produces:
+ *      integer 1 (Q1), decimal 3 (Q3, Q4, Q5), decimal_with_unit 1 (Q2),
+ *      integer_scale 2 (Q69, Q70), likert 37, single_select 23,
+ *      multi_select 5, free_text 1 (Q73) = 73.
+ *    `likert` and `single_select` are both single-choice; C-01 keeps them apart
+ *    because the likert items share the FREQ scale whose option IDs the C-02
+ *    rules name, so the distinction is preserved rather than collapsed.
+ *    A numeric question can still take an explicit N/A (VAL-003 allows it for
+ *    Q5) even though no option set carries one — naPolicy, not options, is what
+ *    says whether N/A is lawful.
+ *    invariants.ts pins the multi_select membership to the five canonical ids.
  * -------------------------------------------------------------------------*/
 export type QuestionResponseKind =
+  | "integer"
+  | "decimal"
+  | "decimal_with_unit"
+  | "integer_scale"
   | "single_select"
-  | "multiple_select"
-  | "numeric"
-  | "boolean"
+  | "likert"
+  | "multi_select"
   | "free_text";
+
 
 /* ---------------------------------------------------------------------------
  * 5. Options
@@ -82,6 +91,15 @@ export interface QuestionOptionDefinition {
    * is never derived, scaled or interpolated here.
    */
   readonly rawBurdenValue: number | null;
+  /**
+   * C-01 Option_Sets `stored_value_or_points`, kept as that sheet's own text
+   * (null when the cell is blank). This is NOT the burden value: for the two
+   * reverse-scored questions C-01 stores the raw frequency while C-02 stores the
+   * burden points, so the two columns legitimately disagree and both are kept —
+   * `rawBurdenValue` (C-02) is what may be added up, `storedValue` is what shows
+   * why. Never score this field.
+   */
+  readonly storedValue: string | null;
   /**
    * True for the "NONE / N/A"-style option of a multi-select question.
    * Mutually exclusive: selecting it clears and disables every other option
@@ -132,9 +150,21 @@ export interface QuestionDefinition {
    */
   readonly domainCode: CanonicalDomainCode | null;
   readonly naPolicy: NaPolicy;
+  /**
+   * C-01 Questions `option_set_id` — the Option_Sets row group this question's
+   * options came from, or null when C-01 defines no option set (the numeric and
+   * free-text questions). Audit only: the options themselves are the contract.
+   */
+  readonly optionSetId: string | null;
+  /**
+   * C-01 Questions `conditional_logic`, verbatim ("NONE" for all 73 questions in
+   * v1.0.1). Carried so that a future conditional module is a visible data
+   * change rather than a silent one; nothing branches on it yet.
+   */
+  readonly conditionalLogic: string;
   readonly options: readonly QuestionOptionDefinition[];
   /**
-   * Non-null if and only if `responseKind === "multiple_select"`, and then
+   * Non-null if and only if `responseKind === "multi_select"`, and then
    * `questionId` MUST be one of MULTIPLE_SELECT_QUESTION_IDS. Checked in
    * invariants.ts.
    */
@@ -150,7 +180,24 @@ export interface ModuleDefinition {
   readonly moduleCode: string | null;
   /** Verbatim C-01 module title. */
   readonly title: string;
+  /**
+   * Participant-facing introduction. C-01 defines none for any of the 13 modules
+   * in v1.0.1, so this is null throughout — it exists so M2's UI has one honest
+   * place to render intro copy, and is never filled with C-01's internal
+   * `purpose` text.
+   */
   readonly introText: string | null;
+  /**
+   * C-01 Modules `purpose`, verbatim. INTERNAL metadata (e.g. "Contextual only.")
+   * — audit and reviewer aid, never participant-facing copy.
+   */
+  readonly purpose: string;
+  /**
+   * C-01 Modules `question_range`, verbatim (e.g. "Q9-Q15"). Kept as text because
+   * invariants.ts compares the roster C-01 declares here against the roster its
+   * own question rows produce; a parse would hide a disagreement behind a match.
+   */
+  readonly questionRange: string;
   /** Question numbers belonging to this module, ascending. */
   readonly questionNumbers: readonly number[];
 }

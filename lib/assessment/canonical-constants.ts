@@ -38,9 +38,8 @@ export const CANONICAL_LAST_QUESTION_NUMBER = CANONICAL_QUESTION_COUNT;
 
 /**
  * Q13, Q14, Q52, Q53, Q54 — the multi-select questions named in Blueprint §2.
- * The IDs are written in the shorthand the Blueprint uses. The canonical
- * `question_id` format used inside C-01 has NOT been confirmed; reconciliation
- * of these shorthand IDs against the real C-01 IDs is an open item.
+ * C-01 v1.0.1 uses these same canonical `question_id` values; C-01/C-02
+ * transcription and invariant checks confirm the IDs and their eligibility.
  */
 export const MULTIPLE_SELECT_QUESTION_IDS = ["Q13", "Q14", "Q52", "Q53", "Q54"] as const;
 export type MultipleSelectQuestionId = (typeof MULTIPLE_SELECT_QUESTION_IDS)[number];
@@ -54,11 +53,11 @@ export const OPTIONAL_FREE_TEXT_QUESTION_ID = "Q73";
  *    the seven domains, so the domain union is derived from it rather than
  *    restated, and the two can never drift apart.
  *
- *  ⚠ CONFLICT, UNRESOLVED — see M2_OPEN_ITEMS. M1 migration 0001 constrains
+ *  ⚠ PERSISTENCE CONFLICT — see M2_OPEN_ITEMS. M1 migration 0001 constrains
  *    `responses.domain_code` to ('HU','SL','ME','CI','SA','ST','IN') and gives
  *    `scores` the columns hu/sl/me/ci/sa/st/ins. That is a different code set
- *    from the one the Blueprint driver logic uses. Only "SL" appears in both.
- *    No mapping has been invented.
+ *    from the one C-02/Blueprint driver logic uses. Only "SL" appears in both.
+ *    The in-memory scorer uses the C-02 codes; no DB mapping is invented.
  * -------------------------------------------------------------------------*/
 export const DRIVER_TIE_BREAK_ORDER = ["MR", "HS", "SR", "CH", "SL", "IB", "BS"] as const;
 export type CanonicalDomainCode = (typeof DRIVER_TIE_BREAK_ORDER)[number];
