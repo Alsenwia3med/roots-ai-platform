@@ -1,15 +1,19 @@
-import { Questionnaire } from "../../components/assessment/Questionnaire";
+import type { Metadata } from "next";
+
+import { AssessmentEntry } from "../../components/assessment/AssessmentEntry";
+
+/**
+ * ASM-01 — /assessment. C-05 §2 "Primary CTA" entry point.
+ *
+ * The zone contract lives in the component. This route carries the C-04 §10
+ * metadata for /assessment verbatim.
+ */
+export const metadata: Metadata = {
+  title: "ROOTS Biological Assessment™ — ROOTS-AI™",
+  description:
+    "Complete 73 questions across 13 modules and receive a transparent educational report.",
+};
 
 export default function AssessmentPage() {
-  return (
-    <main className="min-h-screen bg-[#FAF8] text-[#1A1A1A]">
-      <header className="border-b border-[#D8DEE8] bg-[#1A2A4A] px-5 py-5 text-white sm:px-8">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4">
-          <a href="/" className="font-semibold" aria-label="ROOTS-AI home">ROOTS-AI™</a>
-          <span className="text-sm text-white/90">Educational assessment</span>
-        </div>
-      </header>
-      <Questionnaire />
-    </main>
-  );
+  return <AssessmentEntry />;
 }
