@@ -1,0 +1,619 @@
+ROOTS-AI M2 — automated test run
+Run at: 2026-09-22T06:50:14Z  Node v20.20.2
+Command: npm test (test:scoring + test:assessment + test:report + test:security)
+
+
+> my-nextjs-app@0.1.0 test
+> npm run test:scoring && npm run test:assessment && npm run test:report && npm run test:security
+
+
+> my-nextjs-app@0.1.0 test:scoring
+> node --import tsx --test tests/scoring/source.test.ts tests/scoring/golden.test.ts tests/scoring/ruleset.test.ts tests/scoring/fromAnswers.test.ts tests/scoring/scoresRow.test.ts
+
+TAP version 13
+# Subtest: reverse-scored Q26: "Almost always" comfortably full is zero burden (C-02 GT-014)
+ok 1 - reverse-scored Q26: "Almost always" comfortably full is zero burden (C-02 GT-014)
+# Subtest: reverse-scored Q28: "Never" satisfied is maximum burden (C-02 GT-015)
+ok 2 - reverse-scored Q28: "Never" satisfied is maximum burden (C-02 GT-015)
+# Subtest: an N/A option carries no points and is excluded
+ok 3 - an N/A option carries no points and is excluded
+# Subtest: an unanswered scored item is missing, not zero
+ok 4 - an unanswered scored item is missing, not zero
+# Subtest: P1 needs BOTH >= 3 active days and >= 30 minutes
+ok 5 - P1 needs BOTH >= 3 active days and >= 30 minutes
+# Subtest: P5 readiness is active at 7-10 only
+ok 6 - P5 readiness is active at 7-10 only
+# Subtest: condition and medication counts ignore NONE
+ok 7 - condition and medication counts ignore NONE
+# Subtest: "Not sure" on medication makes Recovery Potential unavailable and flags it
+ok 8 - "Not sure" on medication makes Recovery Potential unavailable and flags it
+# Subtest: an option C-02 does not recognise is rejected, never silently scored
+ok 9 - an option C-02 does not recognise is rejected, never silently scored
+# Subtest: end to end: real lowest-burden answers reproduce golden case GT-001 exactly
+ok 10 - end to end: real lowest-burden answers reproduce golden case GT-001 exactly
+# Subtest: the golden pack holds exactly 30 cases
+ok 11 - the golden pack holds exactly 30 cases
+# Subtest: GT-001 — All scored items at minimum burden
+ok 12 - GT-001 — All scored items at minimum burden
+# Subtest: GT-002 — All scored items at maximum burden
+ok 13 - GT-002 — All scored items at maximum burden
+# Subtest: GT-003 — All scored items at midpoint
+ok 14 - GT-003 — All scored items at midpoint
+# Subtest: GT-004 — MR only at maximum
+ok 15 - GT-004 — MR only at maximum
+# Subtest: GT-005 — SR only at maximum
+ok 16 - GT-005 — SR only at maximum
+# Subtest: GT-006 — HS only at maximum
+ok 17 - GT-006 — HS only at maximum
+# Subtest: GT-007 — SL only at maximum
+ok 18 - GT-007 — SL only at maximum
+# Subtest: GT-008 — IB only at maximum
+ok 19 - GT-008 — IB only at maximum
+# Subtest: GT-009 — CH only at maximum
+ok 20 - GT-009 — CH only at maximum
+# Subtest: GT-010 — BS only at maximum
+ok 21 - GT-010 — BS only at maximum
+# Subtest: GT-011 — Domain classification boundary 25
+ok 22 - GT-011 — Domain classification boundary 25
+# Subtest: GT-012 — Domain classification boundary 50
+ok 23 - GT-012 — Domain classification boundary 50
+# Subtest: GT-013 — Domain classification boundary 75
+ok 24 - GT-013 — Domain classification boundary 75
+# Subtest: GT-014 — Reverse-scored Q26 raw Always becomes zero burden
+ok 25 - GT-014 — Reverse-scored Q26 raw Always becomes zero burden
+# Subtest: GT-015 — Reverse-scored Q28 raw Never becomes maximum burden
+ok 26 - GT-015 — Reverse-scored Q28 raw Never becomes maximum burden
+# Subtest: GT-016 — Exactly 50% coverage for four-item SL domain remains calculable
+ok 27 - GT-016 — Exactly 50% coverage for four-item SL domain remains calculable
+# Subtest: GT-017 — Below 50% coverage makes SL null
+ok 28 - GT-017 — Below 50% coverage makes SL null
+# Subtest: GT-018 — N/A excluded from numerator and denominator
+ok 29 - GT-018 — N/A excluded from numerator and denominator
+# Subtest: GT-019 — Five available domains permit Biological State
+ok 30 - GT-019 — Five available domains permit Biological State
+# Subtest: GT-020 — Four available domains make Biological State null
+ok 31 - GT-020 — Four available domains make Biological State null
+# Subtest: GT-021 — Co-primary driver tie within three points
+ok 32 - GT-021 — Co-primary driver tie within three points
+# Subtest: GT-022 — No driver when every domain is below 25
+ok 33 - GT-022 — No driver when every domain is below 25
+# Subtest: GT-023 — Low answer confidence reduces ROOTS Confidence
+ok 34 - GT-023 — Low answer confidence reduces ROOTS Confidence
+# Subtest: GT-024 — High answer confidence and consistent responses
+ok 35 - GT-024 — High answer confidence and consistent responses
+# Subtest: GT-025 — Young age, no conditions, no medicines, five protective factors
+ok 36 - GT-025 — Young age, no conditions, no medicines, five protective factors
+# Subtest: GT-026 — Older age, multiple conditions and medicines, no protective factors
+ok 37 - GT-026 — Older age, multiple conditions and medicines, no protective factors
+# Subtest: GT-027 — Activity minimum burden mapping
+ok 38 - GT-027 — Activity minimum burden mapping
+# Subtest: GT-028 — Activity maximum burden mapping
+ok 39 - GT-028 — Activity maximum burden mapping
+# Subtest: GT-029 — One missing item in every domain
+ok 40 - GT-029 — One missing item in every domain
+# Subtest: GT-030 — Mixed high-burden profile with complete data
+ok 41 - GT-030 — Mixed high-burden profile with complete data
+# Subtest: C-02 p.18 ruleset quality controls
+    # Subtest: domain count is 7
+    ok 1 - domain count is 7
+    # Subtest: mapping count is 40
+    ok 2 - mapping count is 40
+    # Subtest: reverse-scored count is 2 (Q26, Q28)
+    ok 3 - reverse-scored count is 2 (Q26, Q28)
+    # Subtest: golden tests count is 30
+    ok 4 - golden tests count is 30
+    # Subtest: MR items is 7
+    ok 5 - MR items is 7
+    # Subtest: HS items is 8
+    ok 6 - HS items is 8
+    # Subtest: classification rows is 12
+    ok 7 - classification rows is 12
+    1..7
+ok 42 - C-02 p.18 ruleset quality controls
+# Subtest: ruleset shape
+    # Subtest: every scored question maps to exactly one domain
+    ok 1 - every scored question maps to exactly one domain
+    # Subtest: all weights are 1.0
+    ok 2 - all weights are 1.0
+    # Subtest: every option carries 0-4 burden points
+    ok 3 - every option carries 0-4 burden points
+    # Subtest: reverse-scored items are the frequency scale inverted (points = 4 - raw)
+    ok 4 - reverse-scored items are the frequency scale inverted (points = 4 - raw)
+    # Subtest: classification bands tile 0-100 with no gaps or overlaps
+    ok 5 - classification bands tile 0-100 with no gaps or overlaps
+    1..5
+ok 43 - ruleset shape
+# Subtest: C-01 <-> C-02 alignment
+    # Subtest: Q9 is answered from C-01 option set GAIN_PATTERN, fully covered by C-02 points
+    ok 1 - Q9 is answered from C-01 option set GAIN_PATTERN, fully covered by C-02 points
+    # Subtest: Q10 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 2 - Q10 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q11 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 3 - Q11 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q12 is answered from C-01 option set WEIGHT_CYCLES, fully covered by C-02 points
+    ok 4 - Q12 is answered from C-01 option set WEIGHT_CYCLES, fully covered by C-02 points
+    # Subtest: Q46 is answered from C-01 option set ACTIVITY_DAYS, fully covered by C-02 points
+    ok 5 - Q46 is answered from C-01 option set ACTIVITY_DAYS, fully covered by C-02 points
+    # Subtest: Q47 is answered from C-01 option set ACTIVITY_DURATION, fully covered by C-02 points
+    ok 6 - Q47 is answered from C-01 option set ACTIVITY_DURATION, fully covered by C-02 points
+    # Subtest: Q48 is answered from C-01 option set ACTIVITY_TYPE, fully covered by C-02 points
+    ok 7 - Q48 is answered from C-01 option set ACTIVITY_TYPE, fully covered by C-02 points
+    # Subtest: Q16 is answered from C-01 option set SLEEP_HOURS, fully covered by C-02 points
+    ok 8 - Q16 is answered from C-01 option set SLEEP_HOURS, fully covered by C-02 points
+    # Subtest: Q17 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 9 - Q17 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q18 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 10 - Q18 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q19 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 11 - Q19 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q20 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 12 - Q20 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q21 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 13 - Q21 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q22 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 14 - Q22 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q23 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 15 - Q23 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q24 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 16 - Q24 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q25 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 17 - Q25 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q26 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 18 - Q26 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q27 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 19 - Q27 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q28 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 20 - Q28 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q29 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 21 - Q29 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q30 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 22 - Q30 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q31 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 23 - Q31 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q32 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 24 - Q32 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q33 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 25 - Q33 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q34 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 26 - Q34 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q35 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 27 - Q35 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q36 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 28 - Q36 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q37 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 29 - Q37 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q38 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 30 - Q38 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q39 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 31 - Q39 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q40 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 32 - Q40 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q41 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 33 - Q41 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q42 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 34 - Q42 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q43 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 35 - Q43 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q44 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 36 - Q44 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q45 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 37 - Q45 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q49 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 38 - Q49 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q50 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 39 - Q50 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: Q51 is answered from C-01 option set FREQ, fully covered by C-02 points
+    ok 40 - Q51 is answered from C-01 option set FREQ, fully covered by C-02 points
+    # Subtest: C-01 stored values equal C-02 points everywhere except the two reverse-scored items
+    ok 41 - C-01 stored values equal C-02 points everywhere except the two reverse-scored items
+    # Subtest: protective-factor and availability option IDs exist in C-01
+    ok 42 - protective-factor and availability option IDs exist in C-01
+    # Subtest: Q72 answer confidence carries the values C-02 SC-008 expects
+    ok 43 - Q72 answer confidence carries the values C-02 SC-008 expects
+    1..43
+ok 44 - C-01 <-> C-02 alignment
+# Subtest: GT-030 maps to the expected columns
+ok 45 - GT-030 maps to the expected columns
+# Subtest: no dominant burden stores no drivers (GT-022)
+ok 46 - no dominant burden stores no drivers (GT-022)
+# Subtest: the trace carries the raw option IDs (C-02 SC-001 audit fields)
+ok 47 - the trace carries the raw option IDs (C-02 SC-001 audit fields)
+# Subtest: schema contract: every column written exists in public.scores
+ok 48 - schema contract: every column written exists in public.scores
+# Subtest: schema contract: every C-02 confidence label satisfies the confidence_label CHECK
+ok 49 - schema contract: every C-02 confidence label satisfies the confidence_label CHECK
+# Subtest: M2 item 7: every score row records the controlled sources it was calculated from
+ok 50 - M2 item 7: every score row records the controlled sources it was calculated from
+# Subtest: controlled source identity
+    # Subtest: C-01 JSON was generated from the v1.0.1 CORRECTED workbook in the repository
+    ok 1 - C-01 JSON was generated from the v1.0.1 CORRECTED workbook in the repository
+    # Subtest: C-02 ruleset and golden tests were generated from the v1.0.1 CORRECTED workbook
+    ok 2 - C-02 ruleset and golden tests were generated from the v1.0.1 CORRECTED workbook
+    1..2
+ok 51 - controlled source identity
+# Subtest: C-01 counts (M2 item 1)
+    # Subtest: 73 questions, 13 ordered modules, 71 required, 2 optional, 40 scoring-eligible
+    ok 1 - 73 questions, 13 ordered modules, 71 required, 2 optional, 40 scoring-eligible
+    # Subtest: C-01 scoring-eligible questions are exactly the C-02 mapped questions
+    ok 2 - C-01 scoring-eligible questions are exactly the C-02 mapped questions
+    # Subtest: every C-01 QA check in the workbook is PASS
+    ok 3 - every C-01 QA check in the workbook is PASS
+    1..3
+ok 52 - C-01 counts (M2 item 1)
+# Subtest: validation (M2 item 2)
+    # Subtest: required multi-selects Q13, Q14, Q52, Q53, Q54 reject an empty array
+    ok 1 - required multi-selects Q13, Q14, Q52, Q53, Q54 reject an empty array
+    # Subtest: NONE and N/A cannot be combined with other selections
+    ok 2 - NONE and N/A cannot be combined with other selections
+    # Subtest: options outside the approved set are rejected
+    ok 3 - options outside the approved set are rejected
+    # Subtest: Q73 is optional free text with no N/A
+    ok 4 - Q73 is optional free text with no N/A
+    # Subtest: N/A is accepted only where C-01 allows it
+    ok 5 - N/A is accepted only where C-01 allows it
+    # Subtest: missing answers are never treated as N/A: a submission missing any required answer is incomplete
+    ok 6 - missing answers are never treated as N/A: a submission missing any required answer is incomplete
+    # Subtest: error wording is the approved C-01 v1.0.1 text
+    ok 7 - error wording is the approved C-01 v1.0.1 text
+    1..7
+ok 53 - validation (M2 item 2)
+# Subtest: C-02 constants match the workbook rule text (M2 items 4, 10)
+    # Subtest: raw scale 0-4, 50% coverage, 5 of 7 domains, half-away-from-zero rounding
+    ok 1 - raw scale 0-4, 50% coverage, 5 of 7 domains, half-away-from-zero rounding
+    # Subtest: Opportunity, protective, recovery and confidence constants
+    ok 2 - Opportunity, protective, recovery and confidence constants
+    # Subtest: evidence and driver constants
+    ok 3 - evidence and driver constants
+    # Subtest: tie order is MR, HS, SR, CH, SL, IB, BS (DRV-002)
+    ok 4 - tie order is MR, HS, SR, CH, SL, IB, BS (DRV-002)
+    # Subtest: age, condition and medication bands
+    ok 5 - age, condition and medication bands
+    # Subtest: every C-02 QA check in the workbook is PASS
+    ok 6 - every C-02 QA check in the workbook is PASS
+    1..6
+ok 54 - C-02 constants match the workbook rule text (M2 items 4, 10)
+# Subtest: driver rules across all 30 golden cases (M2 item 5)
+    # Subtest: GT-001: drivers are eligible, distinct and in canonical order
+    ok 1 - GT-001: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-002: drivers are eligible, distinct and in canonical order
+    ok 2 - GT-002: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-003: drivers are eligible, distinct and in canonical order
+    ok 3 - GT-003: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-004: drivers are eligible, distinct and in canonical order
+    ok 4 - GT-004: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-005: drivers are eligible, distinct and in canonical order
+    ok 5 - GT-005: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-006: drivers are eligible, distinct and in canonical order
+    ok 6 - GT-006: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-007: drivers are eligible, distinct and in canonical order
+    ok 7 - GT-007: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-008: drivers are eligible, distinct and in canonical order
+    ok 8 - GT-008: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-009: drivers are eligible, distinct and in canonical order
+    ok 9 - GT-009: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-010: drivers are eligible, distinct and in canonical order
+    ok 10 - GT-010: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-011: drivers are eligible, distinct and in canonical order
+    ok 11 - GT-011: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-012: drivers are eligible, distinct and in canonical order
+    ok 12 - GT-012: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-013: drivers are eligible, distinct and in canonical order
+    ok 13 - GT-013: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-014: drivers are eligible, distinct and in canonical order
+    ok 14 - GT-014: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-015: drivers are eligible, distinct and in canonical order
+    ok 15 - GT-015: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-016: drivers are eligible, distinct and in canonical order
+    ok 16 - GT-016: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-017: drivers are eligible, distinct and in canonical order
+    ok 17 - GT-017: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-018: drivers are eligible, distinct and in canonical order
+    ok 18 - GT-018: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-019: drivers are eligible, distinct and in canonical order
+    ok 19 - GT-019: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-020: drivers are eligible, distinct and in canonical order
+    ok 20 - GT-020: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-021: drivers are eligible, distinct and in canonical order
+    ok 21 - GT-021: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-022: drivers are eligible, distinct and in canonical order
+    ok 22 - GT-022: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-023: drivers are eligible, distinct and in canonical order
+    ok 23 - GT-023: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-024: drivers are eligible, distinct and in canonical order
+    ok 24 - GT-024: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-025: drivers are eligible, distinct and in canonical order
+    ok 25 - GT-025: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-026: drivers are eligible, distinct and in canonical order
+    ok 26 - GT-026: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-027: drivers are eligible, distinct and in canonical order
+    ok 27 - GT-027: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-028: drivers are eligible, distinct and in canonical order
+    ok 28 - GT-028: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-029: drivers are eligible, distinct and in canonical order
+    ok 29 - GT-029: drivers are eligible, distinct and in canonical order
+    # Subtest: GT-030: drivers are eligible, distinct and in canonical order
+    ok 30 - GT-030: drivers are eligible, distinct and in canonical order
+    1..30
+ok 55 - driver rules across all 30 golden cases (M2 item 5)
+# Subtest: versioning (M2 item 7)
+    # Subtest: assessments and scores are stamped with v1.0.1 CORRECTED, keeping the workbook data versions
+    ok 1 - assessments and scores are stamped with v1.0.1 CORRECTED, keeping the workbook data versions
+    # Subtest: the database records the source once, server-side only
+    ok 2 - the database records the source once, server-side only
+    1..2
+ok 56 - versioning (M2 item 7)
+1..56
+# tests 152
+# suites 9
+# pass 152
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 562.6197
+
+> my-nextjs-app@0.1.0 test:assessment
+> node --import tsx --test tests/assessment/progress.test.ts
+
+TAP version 13
+# Subtest: no answers is 0%, all 71 required answers is 100%
+ok 1 - no answers is 0%, all 71 required answers is 100%
+# Subtest: the two optional questions (Q5, Q73) never hold progress back or add to it
+ok 2 - the two optional questions (Q5, Q73) never hold progress back or add to it
+# Subtest: progress rises monotonically as required answers are added, in question order
+ok 3 - progress rises monotonically as required answers are added, in question order
+# Subtest: unknown or duplicated IDs cannot inflate progress
+ok 4 - unknown or duplicated IDs cannot inflate progress
+# Subtest: all 13 modules report their state: not started, needs attention, complete
+ok 5 - all 13 modules report their state: not started, needs attention, complete
+# Subtest: resume returns to the first module with an unanswered required question
+ok 6 - resume returns to the first module with an unanswered required question
+# Subtest: the same saved answers always give the same progress and resume point (refresh / sign-in again)
+ok 7 - the same saved answers always give the same progress and resume point (refresh / sign-in again)
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 294.4011
+
+> my-nextjs-app@0.1.0 test:report
+> node --import tsx --test tests/report/build.test.ts tests/report/privacy.test.ts tests/report/displayName.test.ts tests/report/contactAndHistory.test.ts tests/report/adminOps.test.ts
+
+TAP version 13
+# Subtest: the PDF is a valid multi-page document with the report metadata
+ok 1 - the PDF is a valid multi-page document with the report metadata
+# Subtest: the PDF is rendered from the report as stored: same input, same pages
+ok 2 - the PDF is rendered from the report as stored: same input, same pages
+# Subtest: text the PDF fonts cannot show is spelled out or replaced, never fatal
+ok 3 - text the PDF fonts cannot show is spelled out or replaced, never fatal
+# Subtest: only allow-listed fields can be exported, and research_id is always included
+ok 4 - only allow-listed fields can be exported, and research_id is always included
+# Subtest: no allow-listed field is a direct identifier
+ok 5 - no allow-listed field is a direct identifier
+# Subtest: small cohorts are refused by the cell-size check
+ok 6 - small cohorts are refused by the cell-size check
+# Subtest: CSV cells are quoted and protected against spreadsheet formula injection
+ok 7 - CSV cells are quoted and protected against spreadsheet formula injection
+# Subtest: the export never selects identity columns from the database
+ok 8 - the export never selects identity columns from the database
+# Subtest: a staff grant stops counting when it is revoked or expires
+ok 9 - a staff grant stops counting when it is revoked or expires
+# Subtest: the database role check also honours expiry
+ok 10 - the database role check also honours expiry
+# Subtest: RPT-01 structure and fidelity
+    # Subtest: exactly 19 sections, numbered 1-19, with the C-03 titles in order
+    ok 1 - exactly 19 sections, numbered 1-19, with the C-03 titles in order
+    # Subtest: scores and drivers are copied from the scoring result exactly
+    ok 2 - scores and drivers are copied from the scoring result exactly
+    # Subtest: carries every canonical top-level key C-03 §9 requires
+    ok 3 - carries every canonical top-level key C-03 §9 requires
+    # Subtest: section 7 bars are in the fixed order MR, HS, SR, CH, SL, IB, BS
+    ok 4 - section 7 bars are in the fixed order MR, HS, SR, CH, SL, IB, BS
+    # Subtest: a co-primary driver names both domains
+    ok 5 - a co-primary driver names both domains
+    # Subtest: the participant defaults to "Participant" when no display name exists
+    ok 6 - the participant defaults to "Participant" when no display name exists
+    1..6
+ok 11 - RPT-01 structure and fidelity
+# Subtest: RPT-02 null and missing states are never imputed
+    # Subtest: a null domain shows "Not enough information" and is listed as a limitation
+    ok 1 - a null domain shows "Not enough information" and is listed as a limitation
+    # Subtest: a null Biological State leaves State, Opportunity and Recovery unavailable
+    ok 2 - a null Biological State leaves State, Opportunity and Recovery unavailable
+    # Subtest: confidence never conceals missing domains
+    ok 3 - confidence never conceals missing domains
+    # Subtest: no dominant burden: approved no-driver copy, and no micro-actions invented
+    ok 4 - no dominant burden: approved no-driver copy, and no micro-actions invented
+    # Subtest: no protective factors: approved "may reflect missing data" copy
+    ok 5 - no protective factors: approved "may reflect missing data" copy
+    # Subtest: no NaN or Infinity anywhere
+    ok 6 - no NaN or Infinity anywhere
+    1..6
+ok 12 - RPT-02 null and missing states are never imputed
+# Subtest: RPT-03 no prohibited claims
+    # Subtest: GT-001 report contains no prohibited phrase
+    ok 1 - GT-001 report contains no prohibited phrase
+    # Subtest: GT-002 report contains no prohibited phrase
+    ok 2 - GT-002 report contains no prohibited phrase
+    # Subtest: GT-003 report contains no prohibited phrase
+    ok 3 - GT-003 report contains no prohibited phrase
+    # Subtest: GT-004 report contains no prohibited phrase
+    ok 4 - GT-004 report contains no prohibited phrase
+    # Subtest: GT-005 report contains no prohibited phrase
+    ok 5 - GT-005 report contains no prohibited phrase
+    # Subtest: GT-006 report contains no prohibited phrase
+    ok 6 - GT-006 report contains no prohibited phrase
+    # Subtest: GT-007 report contains no prohibited phrase
+    ok 7 - GT-007 report contains no prohibited phrase
+    # Subtest: GT-008 report contains no prohibited phrase
+    ok 8 - GT-008 report contains no prohibited phrase
+    # Subtest: GT-009 report contains no prohibited phrase
+    ok 9 - GT-009 report contains no prohibited phrase
+    # Subtest: GT-010 report contains no prohibited phrase
+    ok 10 - GT-010 report contains no prohibited phrase
+    # Subtest: GT-011 report contains no prohibited phrase
+    ok 11 - GT-011 report contains no prohibited phrase
+    # Subtest: GT-012 report contains no prohibited phrase
+    ok 12 - GT-012 report contains no prohibited phrase
+    # Subtest: GT-013 report contains no prohibited phrase
+    ok 13 - GT-013 report contains no prohibited phrase
+    # Subtest: GT-014 report contains no prohibited phrase
+    ok 14 - GT-014 report contains no prohibited phrase
+    # Subtest: GT-015 report contains no prohibited phrase
+    ok 15 - GT-015 report contains no prohibited phrase
+    # Subtest: GT-016 report contains no prohibited phrase
+    ok 16 - GT-016 report contains no prohibited phrase
+    # Subtest: GT-017 report contains no prohibited phrase
+    ok 17 - GT-017 report contains no prohibited phrase
+    # Subtest: GT-018 report contains no prohibited phrase
+    ok 18 - GT-018 report contains no prohibited phrase
+    # Subtest: GT-019 report contains no prohibited phrase
+    ok 19 - GT-019 report contains no prohibited phrase
+    # Subtest: GT-020 report contains no prohibited phrase
+    ok 20 - GT-020 report contains no prohibited phrase
+    # Subtest: GT-021 report contains no prohibited phrase
+    ok 21 - GT-021 report contains no prohibited phrase
+    # Subtest: GT-022 report contains no prohibited phrase
+    ok 22 - GT-022 report contains no prohibited phrase
+    # Subtest: GT-023 report contains no prohibited phrase
+    ok 23 - GT-023 report contains no prohibited phrase
+    # Subtest: GT-024 report contains no prohibited phrase
+    ok 24 - GT-024 report contains no prohibited phrase
+    # Subtest: GT-025 report contains no prohibited phrase
+    ok 25 - GT-025 report contains no prohibited phrase
+    # Subtest: GT-026 report contains no prohibited phrase
+    ok 26 - GT-026 report contains no prohibited phrase
+    # Subtest: GT-027 report contains no prohibited phrase
+    ok 27 - GT-027 report contains no prohibited phrase
+    # Subtest: GT-028 report contains no prohibited phrase
+    ok 28 - GT-028 report contains no prohibited phrase
+    # Subtest: GT-029 report contains no prohibited phrase
+    ok 29 - GT-029 report contains no prohibited phrase
+    # Subtest: GT-030 report contains no prohibited phrase
+    ok 30 - GT-030 report contains no prohibited phrase
+    # Subtest: the laboratory prompts never name sleep apnoea or recommend hs-CRP, even when every prompt applies
+    ok 31 - the laboratory prompts never name sleep apnoea or recommend hs-CRP, even when every prompt applies
+    1..31
+ok 13 - RPT-03 no prohibited claims
+# Subtest: RPT-07 fallback and disclaimer
+    # Subtest: governed-narrative sections use the approved deterministic fallback
+    ok 1 - governed-narrative sections use the approved deterministic fallback
+    # Subtest: the full disclaimer is present, untruncated
+    ok 2 - the full disclaimer is present, untruncated
+    1..2
+ok 14 - RPT-07 fallback and disclaimer
+# Subtest: canonical hash
+    # Subtest: the same inputs always give the same hash
+    ok 1 - the same inputs always give the same hash
+    # Subtest: the hash does not depend on property order
+    ok 2 - the hash does not depend on property order
+    # Subtest: different scores give a different hash
+    ok 3 - different scores give a different hash
+    1..3
+ok 15 - canonical hash
+# Subtest: a complete enquiry is accepted and the email normalised
+ok 16 - a complete enquiry is accepted and the email normalised
+# Subtest: missing, short, over-long and wrongly typed fields are refused
+ok 17 - missing, short, over-long and wrongly typed fields are refused
+# Subtest: line breaks in the name cannot inject email headers
+ok 18 - line breaks in the name cannot inject email headers
+# Subtest: report history filters by owner and submitted status, and reads no answer-bearing columns
+ok 19 - report history filters by owner and submitted status, and reads no answer-bearing columns
+# Subtest: accepts ordinary names, including non-English scripts and punctuation used in names
+ok 20 - accepts ordinary names, including non-English scripts and punctuation used in names
+# Subtest: tidies spacing and treats blank as "no name"
+ok 21 - tidies spacing and treats blank as "no name"
+# Subtest: refuses emails, phone numbers, markup and over-long values
+ok 22 - refuses emails, phone numbers, markup and over-long values
+# Subtest: a saved name appears on the report cover; no name falls back to "Participant"
+ok 23 - a saved name appears on the report cover; no name falls back to "Participant"
+# Subtest: participants can update only display_name and locale on their profile
+ok 24 - participants can update only display_name and locale on their profile
+# Subtest: reports: signed-in users cannot read the canonical JSON or generation metadata
+ok 25 - reports: signed-in users cannot read the canonical JSON or generation metadata
+# Subtest: scores: signed-in users cannot read the calculation trace
+ok 26 - scores: signed-in users cannot read the calculation trace
+# Subtest: responses: no staff read policy exists
+ok 27 - responses: no staff read policy exists
+1..27
+# tests 70
+# suites 5
+# pass 70
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 848.1987
+
+> my-nextjs-app@0.1.0 test:security
+> node --import tsx --test tests/security/bypass.test.ts
+
+TAP version 13
+# Subtest: stored answers are validated again at submission
+    # Subtest: a complete, valid answer set passes the gate
+    ok 1 - a complete, valid answer set passes the gate
+    # Subtest: blocked: option outside the approved set (Q10)
+    ok 2 - blocked: option outside the approved set (Q10)
+    # Subtest: blocked: empty required multi-select (Q52)
+    ok 3 - blocked: empty required multi-select (Q52)
+    # Subtest: blocked: NONE combined with a condition (Q13)
+    ok 4 - blocked: NONE combined with a condition (Q13)
+    # Subtest: blocked: N/A where C-01 does not allow it (Q1)
+    ok 5 - blocked: N/A where C-01 does not allow it (Q1)
+    # Subtest: blocked: N/A on Q73 free text (Q73)
+    ok 6 - blocked: N/A on Q73 free text (Q73)
+    # Subtest: blocked: age below 18 (Q1)
+    ok 7 - blocked: age below 18 (Q1)
+    # Subtest: blocked: age as text (Q1)
+    ok 8 - blocked: age as text (Q1)
+    # Subtest: blocked: age not finite (Q1)
+    ok 9 - blocked: age not finite (Q1)
+    # Subtest: blocked: height out of range (Q3)
+    ok 10 - blocked: height out of range (Q3)
+    # Subtest: blocked: waist with an invented unit (Q6)
+    ok 11 - blocked: waist with an invented unit (Q6)
+    # Subtest: blocked: readiness above 10 (Q69)
+    ok 12 - blocked: readiness above 10 (Q69)
+    # Subtest: blocked: free text over 1,000 characters (Q73)
+    ok 13 - blocked: free text over 1,000 characters (Q73)
+    # Subtest: blocked: a question that does not exist (Q999)
+    ok 14 - blocked: a question that does not exist (Q999)
+    # Subtest: blocked: a raw score instead of an option (Q17)
+    ok 15 - blocked: a raw score instead of an option (Q17)
+    # Subtest: a missing required answer is never treated as N/A
+    ok 16 - a missing required answer is never treated as N/A
+    # Subtest: the submit route scores only what the gate accepted, from the stored answers
+    ok 17 - the submit route scores only what the gate accepted, from the stored answers
+    1..17
+ok 1 - stored answers are validated again at submission
+# Subtest: only the 40 scoring items can influence scores
+    # Subtest: changing every contextual (non-scoring) answer leaves every score unchanged
+    ok 1 - changing every contextual (non-scoring) answer leaves every score unchanged
+    # Subtest: a scoring item accepts only options with C-02 points (or N/A)
+    ok 2 - a scoring item accepts only options with C-02 points (or N/A)
+    # Subtest: a stored raw point value cannot stand in for an option
+    ok 3 - a stored raw point value cannot stand in for an option
+    # Subtest: scores are recomputed identically from the same answers (deterministic)
+    ok 4 - scores are recomputed identically from the same answers (deterministic)
+    1..4
+ok 2 - only the 40 scoring items can influence scores
+# Subtest: no endpoint accepts scores, drivers or classifications from a client
+    # Subtest: no API route writes score or report rows from request data
+    ok 1 - no API route writes score or report rows from request data
+    # Subtest: every question the autosave API accepts is validated against C-01
+    ok 2 - every question the autosave API accepts is validated against C-01
+    1..2
+ok 3 - no endpoint accepts scores, drivers or classifications from a client
+1..3
+# tests 23
+# suites 3
+# pass 23
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 307.4923

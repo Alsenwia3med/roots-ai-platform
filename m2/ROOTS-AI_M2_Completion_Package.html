@@ -1,0 +1,311 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>ROOTS-AI M2 Completion Package</title>
+<style>
+body{font:13px/1.55 system-ui,Segoe UI,Roboto,sans-serif;color:#1a1a1a;margin:0}
+main{max-width:900px;margin:0 auto;padding:28px 18px}
+h1{color:#1a2a4a;font-size:24px;margin:0 0 10px}h2{color:#1a2a4a;font-size:17px;margin:26px 0 8px;border-bottom:1px solid #d8dee8;padding-bottom:4px}
+table{border-collapse:collapse;width:100%;margin:8px 0 14px}th,td{border:1px solid #d8dee8;padding:5px 7px;text-align:left;vertical-align:top}th{background:#f5f7fa}
+code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;background:#f5f7fa;padding:1px 3px;border-radius:3px;word-break:break-all}
+pre{background:#f5f7fa;padding:10px;border-radius:6px;overflow-x:auto}pre code{background:none}
+hr{border:0;border-top:1px solid #d8dee8;margin:20px 0}strong{color:#1a2a4a}
+@media print{h2{break-after:avoid}table,section{break-inside:avoid}}
+</style></head><body><main><h1>ROOTS-AI™ — M2 Assessment &amp; Scoring: Completion Package</h1>
+<p><strong>Milestone:</strong> M2 — Assessment &amp; Scoring<br />
+<strong>Controlled sources:</strong> C-01 Canonical Question Bank v1.0.1 CORRECTED · C-02 Canonical Scoring Rules &amp; Golden Tests v1.0.1 CORRECTED<br />
+<strong>Build / commit:</strong> <code>ROOTS-AI-Health-Systems/demo-repository</code> · branch <code>main</code> · commit <code>4056363</code> · <strong>Deployment for verification:</strong> <code>https://root-ai-updated.vercel.app</code><br />
+<strong>Prepared:</strong> 22 September 2026</p>
+<p>This is the single consolidated M2 submission requested in item 12. Each section below maps one M2 checklist item to its implementation, its test and its evidence, with the command to reproduce it.</p>
+<hr />
+<h2>Summary of results</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>M2 requirement</th>
+<th>Result</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Complete canonical assessment — 73 / 13 / 71 / 2 / 40</td>
+<td><strong>PASS</strong></td>
+<td><code>evidence/automated-tests.txt</code> (source suite)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Validation (all C-01 rules)</td>
+<td><strong>PASS</strong></td>
+<td><code>evidence/automated-tests.txt</code> (validation + bypass suites)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Assessment progress across 13 modules</td>
+<td><strong>PASS</strong></td>
+<td><code>evidence/automated-tests.txt</code> (progress suite)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Deterministic seven-domain scoring (C-02 v1.0.1)</td>
+<td><strong>PASS</strong></td>
+<td>Golden Tests + source suite</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Driver logic (DRV-001…004 v1.0.1)</td>
+<td><strong>PASS</strong></td>
+<td>Golden Tests + driver suite</td>
+</tr>
+<tr>
+<td>6</td>
+<td>No AI authority over scoring</td>
+<td><strong>PASS</strong></td>
+<td>§6 below</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Versioning (C-01 / C-02 v1.0.1 CORRECTED persisted)</td>
+<td><strong>PASS</strong></td>
+<td>versioning tests + DB tests BR-14, IN-07, SCH-01</td>
+</tr>
+<tr>
+<td>8</td>
+<td>30 Golden Tests</td>
+<td><strong>30/30 PASS</strong></td>
+<td><code>evidence/golden-tests.pdf</code> / <code>.html</code> / <code>.csv</code> / <code>.json</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td>Security and negative tests</td>
+<td><strong>73/73 DB · 50/50 API · 23/23 bypass</strong></td>
+<td><code>evidence/db-security-tests.live.csv</code>, <code>evidence/api-negative-tests.html</code>, <code>ROOTS-AI_M2_Security_Tests.sql</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Controlled technical source (XLSX → generated data)</td>
+<td><strong>PASS</strong></td>
+<td><code>evidence/source-check.txt</code></td>
+</tr>
+<tr>
+<td>11</td>
+<td>Code pushed to ROOTS GitHub</td>
+<td><strong>PASS</strong></td>
+<td><code>ROOTS-AI-Health-Systems/demo-repository</code> @ <code>4056363</code></td>
+</tr>
+<tr>
+<td>12</td>
+<td>One consolidated package</td>
+<td>This document</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Automated tests: 252 / 252 PASS</strong> (scoring 152 · assessment progress 7 · report 70 · security 23) — <code>npm test</code>.</p>
+<hr />
+<h2>1. Complete canonical assessment</h2>
+<ul>
+<li><strong>Implementation.</strong> <code>scripts/canonical/generate.py</code> reads <code>02_ROOTS_AI_C01_Canonical_Question_Bank_v1.0.1_CORRECTED.xlsx</code> and writes <code>lib/assessment/c01-question-bank.json</code>. The application loads questions, modules, option sets and validation messages only from that file; nothing is retyped. Question IDs, wording, order, module assignment, response types, option sets, scoring eligibility and Phase 1 visibility are exactly as in C-01.</li>
+<li><strong>Tests</strong> (<code>tests/scoring/source.test.ts</code>): exactly 73 questions Q1…Q73 in order; 13 modules ordered 1–13; 71 required; 2 optional (Q5, Q73); 40 scoring-eligible, identical to the C-02 mapping; every C-01 QA check in the workbook is PASS.</li>
+</ul>
+<h2>2. Validation</h2>
+<ul>
+<li><strong>Implementation.</strong> <code>lib/assessment/validation.ts</code> — server-authoritative; the browser runs the same functions for immediate feedback. Error wording is read from the C-01 Validation sheet (VAL-001…011).</li>
+<li><strong>Behaviour.</strong></li>
+<li>A required question is complete only with a valid response, or an explicit N/A where C-01 permits it.</li>
+<li>Q13, Q14, Q52, Q53, Q54: at least one approved option; <strong>an empty array is invalid</strong>.</li>
+<li>NONE / N/A are mutually exclusive with other selections.</li>
+<li>Q73 is optional free text, 0–1,000 characters, <strong>no N/A</strong>.</li>
+<li><strong>Missing is never treated as N/A.</strong></li>
+<li>Submission re-validates <strong>every stored answer on the server</strong> (<code>checkStoredAnswers</code>), so a value written around the API cannot be submitted or scored.</li>
+<li>"Next" is governed: required questions on a module must be answered before moving on (C-05 ASM-06).</li>
+<li><strong>Tests.</strong> <code>tests/scoring/source.test.ts</code> (validation suite) and <code>tests/security/bypass.test.ts</code> (14 tampering cases blocked at submission).</li>
+</ul>
+<h2>3. Assessment progress</h2>
+<ul>
+<li><strong>Implementation.</strong> <code>lib/assessment/progress.ts</code> — progress is computed from the saved answers on the server (the 71 required questions), never from a client value; 13 module states (complete / needs attention / not started); resume returns to the first module with an unanswered required question. Autosave/resume from M1 is unchanged.</li>
+<li><strong>Tests.</strong> <code>tests/assessment/progress.test.ts</code> — 0% → 100%; optional questions neither block nor add; monotonic; unknown/duplicate IDs cannot inflate progress; all 13 module states; resume point; identical results after refresh / signing in again.</li>
+</ul>
+<h2>4. Deterministic seven-domain scoring</h2>
+<ul>
+<li><strong>Implementation.</strong> <code>lib/scoring/engine.ts</code> (pure function, exact integer arithmetic) with <code>lib/scoring/c02-ruleset.ts</code>, whose tables are read from <code>lib/scoring/c02-ruleset.json</code>, generated from <code>03_ROOTS_AI_C02_Canonical_Scoring_Rules_and_Golden_Tests_v1.0.1_CORRECTED.xlsx</code>. Scoring runs only on the server, at submission, from the stored answers.</li>
+<li><strong>Canonical rules implemented as written:</strong> 40 scoring-eligible items only; raw burden scale 0–4; Q26/Q28 reverse-scored; 50% domain coverage threshold (below → null); Biological State requires ≥ 5 of 7 domains (else null); integer rounding half-away-from-zero; Opportunity and Recovery Potential to one decimal; weights, thresholds, classifications, N/A and missing handling, coverage, confidence and evidence per C-02.</li>
+<li><strong>Tests.</strong> Every formula constant held in code is checked against the workbook's own rule text (<code>tests/scoring/source.test.ts</code>); contextual (non-scoring) answers are proven not to change any score (<code>tests/security/bypass.test.ts</code>).</li>
+</ul>
+<h2>5. Driver logic</h2>
+<ul>
+<li><strong>Implementation (DRV-001…004 v1.0.1).</strong> Only available domains scoring ≥ 25 are eligible; ranking by score descending; exact ties in the fixed order <strong>MR → HS → SR → CH → SL → IB → BS</strong> (parsed from the DRV-002 rule text); if the top two eligible scores differ by ≤ 3 they are reported <strong>once</strong> as a co-primary pair followed by the next distinct eligible domain — no duplication, no ineligible or null fallback; no eligible domain → no driver. <code>BIO_STATE</code> denotes Biological State; <code>BS</code> is exclusively Biological Safety Signals™.</li>
+<li><strong>Tests.</strong> All 30 Golden Tests; and for all 30 cases, drivers are eligible, distinct and never refer to <code>BIO_STATE</code> (<code>tests/scoring/source.test.ts</code>).</li>
+</ul>
+<h2>6. No AI authority over scoring</h2>
+<p>The M2 build contains <strong>no AI/LLM component</strong>: no AI library, API call or model is used anywhere in the application. Scores, classifications, Biological State, drivers, thresholds, eligibility, missing-data behaviour and Golden Test outputs are produced solely by the deterministic engine. The engine is a pure function (no I/O, clock, randomness or network); stored score rows cannot be changed afterwards by any role (DB test IN-01), and no API route accepts scores, drivers or classifications from a client (<code>tests/security/bypass.test.ts</code>).</p>
+<p>The AI narrative layer is an <strong>M3</strong> deliverable. When it is added it will be read-only with respect to all deterministic outputs, with the M3 AI-boundary evidence (malformed output, score injection, prohibited language, timeout/retry/fallback).</p>
+<h2>7. Versioning</h2>
+<ul>
+<li><strong>What is persisted.</strong></li>
+<li>Every assessment records, when it starts, the controlled question bank it is answered against: <code>{ "c01": { "label": "C-01 v1.0.1 CORRECTED", "questionnaire_version": "1.0.0", "document", "sha256" } }</code>.</li>
+<li>Every score row records the question bank and the scoring rules it was calculated from — <code>C-01 v1.0.1 CORRECTED</code> and <code>C-02 v1.0.1 CORRECTED</code>, <code>scoring_version 1.0.1</code>, dataset IDs and both workbook SHA-256 fingerprints — also inside its calculation trace.</li>
+<li>Each answer is tied to its assessment, and so to the same source.</li>
+<li><strong>Protection.</strong> The source record is written by the server only, once, and can never be changed — not by the participant, not by staff, not by the server itself (DB tests BR-14, IN-07, SCH-01).</li>
+<li><strong>Note on the two version identifiers.</strong> The C-01 v1.0.1 CORRECTED workbook states <code>questionnaire_version = 1.0.0</code> in its README and data rows. We store that value exactly as the workbook states it, and store the controlled document identity (<code>C-01 v1.0.1 CORRECTED</code> + SHA-256) alongside it, so the two are never conflated. Please confirm this is the intended reading.</li>
+</ul>
+<h2>8. 30 Golden Tests — 30/30 PASS</h2>
+<ul>
+<li><strong>Evidence.</strong> <code>evidence/golden-tests.pdf</code> (also <code>.html</code>, <code>.csv</code>, <code>.json</code>): for every case <strong>Test ID → Input → Expected Output → Actual Output → PASS/FAIL</strong>, with a field-by-field comparison of the eight canonical output fields (exact equality, no tolerance), including corrected driver behaviour, null behaviour, tie / co-primary behaviour and rounding.</li>
+<li><strong>Supplementary classification check (30/30).</strong> The canonical expected output does not list classifications, so every domain, confidence and recovery label is also compared with an independent lookup in the workbook's Classifications sheet.</li>
+<li><strong>Reproduce.</strong> <code>npm ci</code> → <code>npm run evidence:golden</code> (regenerates the report) · <code>npm run test:scoring</code> (the same 30 cases as automated tests).</li>
+<li><strong>Note on one boundary rule.</strong> Classification bands are whole-number ranges while Recovery Potential has one decimal. A value takes the highest band whose minimum it has reached (74.5 → Moderate, 75.0 → High). No Golden Test falls on such a boundary. Please confirm.</li>
+</ul>
+<h2>9. Security and negative tests</h2>
+<ol>
+<li><strong>Database / RLS — 73/73 PASS on the live database</strong> (<code>evidence/db-security-tests.live.csv</code>). The script <code>ROOTS-AI_M2_Security_Tests.sql</code> is self-contained: ROOTS can run it in the Supabase SQL Editor with no set-up. It creates temporary test accounts, runs every probe as that role exactly as the Supabase API does, rolls every probe back, removes the test accounts and prints one row per test.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Tests</th>
+<th>What it proves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Positive controls</td>
+<td>6</td>
+<td>Permitted access works, so no PASS can come from an empty table</td>
+</tr>
+<tr>
+<td>Anonymous</td>
+<td>5</td>
+<td>No access without sign-in</td>
+</tr>
+<tr>
+<td>Cross-user</td>
+<td>12</td>
+<td>Participant B cannot read or change A's assessments, answers, scores, report, consents or profile</td>
+</tr>
+<tr>
+<td>Browser role</td>
+<td>16</td>
+<td>Participants cannot create/change scores, reports, audit records or roles; cannot submit directly, edit after submission, re-open, delete, change versions or forge the source version</td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>3</td>
+<td>Answer-bearing columns (calculation trace, report content) are unreadable through the API, even by their owner</td>
+</tr>
+<tr>
+<td>Cross-role</td>
+<td>10</td>
+<td>Admin cannot read raw answers or change scores; expired admin access sees nothing</td>
+</tr>
+<tr>
+<td>Integrity</td>
+<td>7</td>
+<td>No role, including the server, can change stored scores, submitted answers, reports or source versions, or delete audit records</td>
+</tr>
+<tr>
+<td>Schema</td>
+<td>2</td>
+<td>Current schema in place; no write privilege on server-only tables</td>
+</tr>
+<tr>
+<td>RLS enabled</td>
+<td>11</td>
+<td>Row Level Security on every application table</td>
+</tr>
+<tr>
+<td>Clean-up</td>
+<td>1</td>
+<td>Test data removed</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>
+<p><strong>API negative tests — 50/50 PASS against the live deployment</strong> (<code>evidence/api-negative-tests.html</code>). No session and forged sessions (forged cookie, forged service-role token) are refused on every protected route; malformed IDs, bodies, idempotency keys and injected values are rejected; unsupported methods are refused; protected pages expose no data; security headers are present. Reproduce: <code>BASE_URL=&lt;deployment&gt; npm run evidence:api</code>.</p>
+</li>
+<li>
+<p><strong>Input-bypass tests — 23/23 PASS</strong> (<code>tests/security/bypass.test.ts</code>). Invalid inputs cannot bypass the canonical controls: 14 kinds of tampered stored answers are blocked at submission; only the 40 scoring items can influence scores; forged options and raw point values cannot be scored; no endpoint accepts scores or reports from a client.</p>
+</li>
+</ol>
+<p><strong>Note on C-06.</strong> C-06 §1 refers to "RLS policies + 12 negative tests". The technical bundle containing those tests was not included in the files received. The 73 tests above cover every requirement C-06 names (cross-user and cross-role access blocked; browser roles cannot create scores, reports or audit records). If the original 12 tests are available, please send them and we will run them as well.</p>
+<h2>10. Controlled technical source</h2>
+<p><code>python scripts/canonical/generate.py --check</code> regenerates the application data from the two XLSX workbooks and fails on any difference. Each generated file records the workbook name, document version and SHA-256 (<code>evidence/source-check.txt</code>). The only transformations are type normalisation and parsing of the golden-test cells, which the workbook stores as JSON text.</p>
+<table>
+<thead>
+<tr>
+<th>Workbook</th>
+<th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C-01 v1.0.1 CORRECTED</td>
+<td><code>8c9c9e601d882e0f694c43a6c5d6cc5be5c8007f870283da7804ce3d32b7444c</code></td>
+</tr>
+<tr>
+<td>C-02 v1.0.1 CORRECTED</td>
+<td><code>12dc3a66a68c4afa9497101959408984ba653b3bb6a099624502429f1e66a028</code></td>
+</tr>
+</tbody>
+</table>
+<h2>11. GitHub</h2>
+<p>The current working codebase is pushed to the ROOTS-owned repository <strong><code>ROOTS-AI-Health-Systems/demo-repository</code></strong>, branch <code>main</code>, commit <strong><code>4056363</code></strong>. As agreed, interconnected later work is present in the repository; M2 acceptance covers only the contractual M2 scope above.</p>
+<hr />
+<h2>Reproducing the results</h2>
+<pre><code>npm ci
+npm test                                   # 252 automated tests
+npm run evidence:golden                    # Golden Test evidence report
+python scripts/canonical/generate.py --check
+BASE_URL=&lt;deployment&gt; npm run evidence:api # API negative tests
+</code></pre>
+<p>Database: run <code>supabase/roots_ai_complete.sql</code>, then <code>docs/m2/ROOTS-AI_M2_Security_Tests.sql</code>, in the Supabase SQL Editor. Every row must read PASS.</p>
+<h2>Package contents</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ROOTS-AI_M2_Completion_Package.pdf</code></td>
+<td>This document</td>
+</tr>
+<tr>
+<td><code>ROOTS-AI_M2_Security_Tests.sql</code></td>
+<td>Self-contained database security test script</td>
+</tr>
+<tr>
+<td><code>evidence/golden-tests.pdf</code> · <code>.html</code> · <code>.csv</code> · <code>.json</code></td>
+<td>30 Golden Tests, case by case</td>
+</tr>
+<tr>
+<td><code>evidence/db-security-tests.live.csv</code></td>
+<td>73/73 database security results (live)</td>
+</tr>
+<tr>
+<td><code>evidence/api-negative-tests.html</code> · <code>.json</code></td>
+<td>50/50 API negative results (live deployment)</td>
+</tr>
+<tr>
+<td><code>evidence/automated-tests.txt</code></td>
+<td>Full automated test run (252)</td>
+</tr>
+<tr>
+<td><code>evidence/source-check.txt</code></td>
+<td>Generated data vs controlled workbooks</td>
+</tr>
+<tr>
+<td><code>supabase/roots_ai_complete.sql</code></td>
+<td>Complete database script (schema, RLS, integrity rules)</td>
+</tr>
+</tbody>
+</table>
+<h2>Points for ROOTS to confirm</h2>
+<ol>
+<li><code>questionnaire_version</code> is stored as <strong>1.0.0</strong>, as the C-01 v1.0.1 CORRECTED workbook states it, with the controlled source <code>C-01 v1.0.1 CORRECTED</code> recorded alongside (§7).</li>
+<li>The Recovery Potential band rule for one-decimal values (§8).</li>
+<li>The original C-06 "12 negative tests", if available (§9).</li>
+</ol></main></body></html>

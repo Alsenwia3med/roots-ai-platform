@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json.schemastore.org/wrangler.json",
+  "name": "roots-ai-platform",
+  "compatibility_date": "2026-07-21",
+  "vars": {
+    "AI_NARRATIVE_ENABLED": "true"
+  }
+}

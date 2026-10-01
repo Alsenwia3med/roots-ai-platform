@@ -1,0 +1,23 @@
+ROOTS-AI™ | RAHUL M3 | FINAL CORRECTED ONE-TIME CONTROLLED HANDOFF
+Issued: 24 September 2026
+
+1. CONTROLLED AUTHORITY
+01_CONTROLLED_BASELINE contains the original, unmodified 16 numbered items of the ROOTS-AI Vendor Package v1.4 (19 physical deliverables), the original File 00 reference register and original SHA256SUMS.txt. File 00 and its precedence rules control interpretation. No baseline document is superseded by this cover note, the report review, or the editable working derivative. Use the original controlled PDFs where a derivative differs.
+
+2. REPORT REVIEW — COMPLETE 35-POINT NOTE
+02_REPORT_REVIEW contains the owner's complete note, unchanged. Apply directly actionable corrections; for each conditional instruction verify the controlled source before implementation. Flag the exact unresolved source gap rather than inventing scoring, version labels, thresholds, approved interpretation, safety rules, medical advice or legal copy. Preserve all 19 canonical sections, immutable report object, C-01/C-02 rules, deterministic drivers, Golden Tests and web/PDF parity. Submit the corrected report and the ten evidence checks requested at the end of the note together.
+
+3. EDITABLE C-07
+03_C07_EDITABLE_WORKING_COPY is an editable PDF-derived working aid containing the 594 source requirement rows, correction overlay and evidence columns. It is not a newly issued controlled source. The controlled C-07 PDF and its applicable corrections prevail in any discrepancy. Vendor must verify every working row against the controlled original before relying on it for acceptance.
+
+4. VISUAL EXECUTION — NO NEW DESIGN BRIEF OR INDEPENDENT REDESIGN
+Use the approved visual and functional decisions in the original controlled package, including File 14 (visual gate), C-05, C-08, File 15 (PUB-01 functional/content reference), File 16 (192 functional/content wireframes), and File 00 precedence. These are not invitations to choose replacement colours, typography, screen structures, copy, or visual identity. Rahul is responsible for faithfully translating the controlled references into the ROOTS-owned editable Figma design system, PUB-01 Golden Screen and application. ROOTS's written Golden Screen approval is a conformity/acceptance gate for the vendor's implementation, not a request that Rahul invent a new design. Submit the required PUB-01 1440px and 360px implementations for written approval before finalizing the 768px/1024px and downstream visuals where required by the controlled visual sequence. Do not characterize File 16's functional SVGs as final aesthetic approval. If a specific final visual detail is not actually defined by the controlled package, identify the exact gap and request a decision; do not improvise or falsely claim a pixel-perfect approved visual source. No separate design fee or transfer of the vendor's contractual Figma/design implementation obligations is authorized by this handoff.
+
+5. ACCESS STATUS — ALREADY PROVIDED
+ROOTS confirms that AI and Google OAuth credentials/access have already been delivered securely. Do not request them again as missing handoff items. Vendor must test the integrations in the ROOTS-owned environment and report only an actual, specific technical blocker. No secrets are copied into this ZIP, chat, email, or GitHub.
+
+6. M3 EVIDENCE AND BOUNDARIES
+Return one integrated M3 release candidate and consolidated evidence for the controlled AI boundary, canonical immutable report, 19/19 web/PDF parity, website/legal/UI flows, accessibility, performance and requirement traceability. M1/M2 accepted scientific baseline remains unchanged. M3 acceptance is not M4 UAT/production/handover acceptance. Report any exact source conflict rather than silently reconciling controlled documents.
+
+7. INTEGRITY
+The original baseline SHA256SUMS.txt is preserved unchanged and applies to its original 19 physical controlled deliverables. 00_ADDITIONAL_SHA256SUMS.txt records the SHA-256 hashes of this README, vendor message, verbatim report review and editable derivative. It does not replace the original manifest.

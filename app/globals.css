@@ -6,3 +6,11 @@ html { scroll-behavior: smooth; }
 body { margin: 0; background: #FAFAF8; }
 button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid #D4AD55; outline-offset: 3px; }
+
+:root {
+  --zd-teal-ink: #437971;
+  --zd-gold-ink: #886b2e;
+  --zd-focus-ring: solid 3px #2563eb;
+}
+body { max-width: 100%; overflow-x: hidden; }
+:focus-visible { outline: var(--zd-focus-ring); outline-offset: 2px; }

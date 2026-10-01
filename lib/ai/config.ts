@@ -1,0 +1,17 @@
+export const AI_CONFIG = {
+  PROVIDER: "openai",
+  DEFAULT_MODEL: "gpt-4.1",
+  PROMPT_VERSION: "1.0.0",
+  SCHEMA_VERSION: "1.0.0",
+  CONTENT_LIBRARY_VERSION: "C-03-v1.0.1",
+  temperature: 0.3,
+  max_tokens: 900,
+  store: false,
+  timeoutMs: 20_000,
+} as const;
+
+export const PROVIDER = AI_CONFIG.PROVIDER;
+export const DEFAULT_MODEL = AI_CONFIG.DEFAULT_MODEL;
+export const PROMPT_VERSION = AI_CONFIG.PROMPT_VERSION;
+export const SCHEMA_VERSION = AI_CONFIG.SCHEMA_VERSION;
+export const CONTENT_LIBRARY_VERSION = AI_CONFIG.CONTENT_LIBRARY_VERSION;

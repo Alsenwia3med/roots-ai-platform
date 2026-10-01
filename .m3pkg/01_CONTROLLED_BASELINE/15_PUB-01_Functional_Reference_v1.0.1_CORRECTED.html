@@ -1,0 +1,485 @@
+<!doctype html>
+<!--
+  ROOTS-AI PUB-01 Functional Reference v1.0.1 CORRECTED
+  Controlled scope: content, required zones, routes, interaction states, accessibility behavior.
+  NOT final visual design. CSS/geometry in this standalone file are reference scaffolding only.
+  Final visual authority: Visual Direction -> written-approved PUB-01 Golden Screen in ROOTS-owned editable Figma
+  -> approved downstream design system/screens.
+  Production routes must navigate normally; JavaScript route interception below is reference-only.
+-->
+<html lang="en" data-reference-mode="true">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ROOTS-AI PUB-01 controlled functional reference v1.0.1. Functional/content/interaction authority only; not final visual design.">
+  <title>PUB-01 Functional Reference v1.0.1 | ROOTS-AI™</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #15171a;
+      --muted: #626971;
+      --line: #d8dce1;
+      --soft: #f4f5f6;
+      --paper: #ffffff;
+      --accent: #2258d5;
+      --accent-ink: #ffffff;
+      --focus: #ff9d00;
+      --danger: #a42b27;
+      --radius: 14px;
+      --content: 1180px;
+      --shadow: 0 18px 44px rgba(18, 25, 38, .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--paper);
+      font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+    body.menu-open { overflow: hidden; }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .skip-link {
+      position: fixed; top: 10px; left: 10px; z-index: 1000;
+      transform: translateY(-160%); padding: 12px 16px;
+      background: var(--ink); color: white; border-radius: 8px;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .reference-banner {
+      min-height: 36px; display: flex; align-items: center; justify-content: center;
+      padding: 7px 20px; background: #15171a; color: white;
+      font-size: 12px; font-weight: 800; letter-spacing: .09em; text-align: center;
+    }
+
+    .reference-authority {
+      padding: 12px 20px; border-bottom: 1px solid var(--line); background: #f7f7f8;
+      color: #34383d; font-size: 12px; line-height: 1.45; text-align: center;
+    }
+    .reference-authority strong { color: var(--ink); }
+    .shell { width: min(calc(100% - 40px), var(--content)); margin-inline: auto; }
+    .site-header {
+      position: relative; z-index: 40; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.97);
+    }
+    .site-header.is-sticky { position: sticky; top: 0; box-shadow: 0 8px 22px rgba(18,25,38,.08); }
+    .header-row { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+    .brand { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; font-size: 21px; font-weight: 850; letter-spacing: -.035em; white-space: nowrap; }
+    .brand small { margin-left: 8px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+    .desktop-nav { display: flex; align-items: center; gap: 4px; }
+    .desktop-nav a, .mobile-nav a { min-height: 44px; display: inline-flex; align-items: center; padding: 8px 10px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 650; }
+    .desktop-nav a:hover, .mobile-nav a:hover { background: var(--soft); }
+    .button {
+      min-height: 48px; display: inline-flex; align-items: center; justify-content: center;
+      padding: 11px 18px; border: 1px solid var(--ink); border-radius: 10px;
+      background: var(--ink); color: white; text-decoration: none; font: inherit; font-weight: 750; cursor: pointer;
+    }
+    .button.secondary { background: transparent; color: var(--ink); }
+    .button.compact { min-height: 44px; padding: 8px 14px; }
+    .menu-button { display: none; width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 10px; background: white; cursor: pointer; font-size: 22px; }
+    .mobile-layer { display: none; }
+    .mobile-layer.open { display: block; position: fixed; inset: 0; z-index: 80; }
+    .mobile-scrim { position: absolute; inset: 0; border: 0; background: rgba(0,0,0,.38); }
+    .mobile-panel { position: absolute; top: 0; right: 0; width: min(88vw, 370px); height: 100%; padding: 20px; background: white; box-shadow: var(--shadow); overflow-y: auto; }
+    .mobile-panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .close-menu { width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 10px; background: white; font-size: 24px; cursor: pointer; }
+    .mobile-nav { display: grid; gap: 4px; }
+    .mobile-nav a { padding-inline: 12px; }
+    .zone { position: relative; border-bottom: 1px solid var(--line); }
+    .zone-label {
+      display: none; position: absolute; top: 10px; left: 10px; z-index: 5;
+      padding: 5px 8px; border-radius: 6px; background: #fff2bf; color: #4b3900;
+      border: 1px solid #d7ba4a; font-size: 11px; font-weight: 850; letter-spacing: .04em;
+    }
+    body.show-zones .zone-label { display: inline-block; }
+    .eyebrow { margin: 0 0 12px; color: var(--accent); font-size: 12px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 820px; margin-bottom: 22px; font-size: clamp(42px, 6.2vw, 82px); line-height: .98; letter-spacing: -.055em; }
+    h2 { margin-bottom: 16px; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.05; letter-spacing: -.045em; }
+    h3 { margin-bottom: 8px; font-size: 20px; line-height: 1.2; }
+    .lead { max-width: 760px; color: #454b52; font-size: clamp(18px, 2vw, 22px); }
+    .hero { min-height: 690px; display: grid; grid-template-columns: 7fr 5fr; align-items: center; gap: 54px; padding-block: 84px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .signature-zone {
+      min-height: 430px; display: grid; align-content: space-between; padding: 26px;
+      border: 1px dashed #858b92; border-radius: 28px; background: linear-gradient(145deg, #fafafa, #eef0f3);
+    }
+    .signature-zone strong { max-width: 260px; font-size: 18px; line-height: 1.2; }
+    .signature-orbit { position: relative; width: min(100%, 330px); aspect-ratio: 1; margin: 8px auto; border: 1px solid #a9afb6; border-radius: 50%; }
+    .signature-orbit::before, .signature-orbit::after { content: ""; position: absolute; inset: 16%; border: 1px solid #bfc4c9; border-radius: 50%; }
+    .signature-orbit::after { inset: 33%; background: white; box-shadow: 0 0 0 1px #c8ccd1; }
+    .signature-note { margin: 0; color: var(--muted); font-size: 13px; }
+    .trust-list { min-height: 94px; display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; gap: 1px; background: var(--line); }
+    .trust-item { height: 100%; display: flex; align-items: center; justify-content: center; padding: 18px; background: white; text-align: center; font-weight: 750; }
+    .section-pad { padding-block: 96px; }
+    .section-head { max-width: 760px; margin-bottom: 38px; }
+    .grid { display: grid; gap: 18px; }
+    .feature-grid { grid-template-columns: repeat(3, 1fr); }
+    .domain-grid { grid-template-columns: repeat(7, 1fr); }
+    .card { min-width: 0; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: white; }
+    .feature-card { min-height: 190px; counter-increment: feature; }
+    .feature-card::before { content: "0" counter(feature); display: block; margin-bottom: 34px; color: var(--muted); font-size: 12px; font-weight: 800; }
+    .feature-grid { counter-reset: feature; }
+    .domain-card { min-height: 255px; padding: 18px; }
+    .domain-code { width: 46px; height: 46px; display: grid; place-items: center; margin-bottom: 28px; border: 1px solid var(--ink); border-radius: 50%; font-size: 12px; font-weight: 850; }
+    .domain-card h3 { font-size: 16px; }
+    .domain-card p { color: var(--muted); font-size: 13px; }
+    .soft-section { background: var(--soft); }
+    .steps { grid-template-columns: repeat(4, 1fr); counter-reset: step; }
+    .step { position: relative; min-height: 250px; background: white; counter-increment: step; }
+    .step::before { content: counter(step); display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: 46px; border-radius: 50%; background: var(--ink); color: white; font-weight: 800; }
+    .step p { color: var(--muted); }
+    .report-wrap { display: grid; grid-template-columns: 5fr 7fr; gap: 42px; align-items: center; }
+    .report-shell { min-height: 440px; padding: 26px; border: 1px solid var(--line); border-radius: 22px; box-shadow: var(--shadow); }
+    .report-state { display: none; }
+    .report-state.active { display: block; }
+    .score-row { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+    .score { font-size: 54px; font-weight: 850; line-height: 1; letter-spacing: -.05em; }
+    .score small { font-size: 18px; font-weight: 700; color: var(--muted); }
+    .state-label { padding: 7px 10px; border: 1px solid var(--ink); border-radius: 999px; font-weight: 800; }
+    .driver { margin-top: 20px; }
+    .driver-line { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; font-weight: 700; }
+    .track { height: 8px; margin-top: 7px; overflow: hidden; border-radius: 999px; background: #e5e7e9; }
+    .track span { display: block; height: 100%; background: #34383d; }
+    .boundary { margin: 26px 0 0; padding: 14px; border-left: 3px solid var(--ink); background: var(--soft); font-size: 14px; }
+    .skeleton { height: 18px; margin: 18px 0; border-radius: 5px; background: linear-gradient(90deg,#e8eaec 25%,#f7f7f8 50%,#e8eaec 75%); background-size: 200% 100%; animation: shimmer 1.3s infinite linear; }
+    .skeleton.short { width: 55%; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    .error-box { min-height: 340px; display: grid; place-items: center; text-align: center; }
+    .pilot { padding-block: 100px; }
+    .pilot-layout { display: grid; grid-template-columns: 6fr 6fr; gap: 64px; }
+    .conditions { margin: 0; padding-left: 22px; }
+    .conditions li { margin-bottom: 12px; }
+    .site-footer { padding-block: 72px 30px; background: var(--ink); color: white; }
+    .footer-top { display: grid; grid-template-columns: 4fr 2fr 2fr 2fr; gap: 36px; }
+    .footer-col h3 { color: #b9bec4; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+    .footer-col a { min-height: 44px; display: flex; align-items: center; color: white; text-decoration: none; }
+    .footer-col a:hover { text-decoration: underline; }
+    .footer-boundary { max-width: 460px; color: #cdd1d5; }
+    .footer-bottom { margin-top: 48px; padding-top: 22px; border-top: 1px solid #3b3f44; color: #cdd1d5; font-size: 13px; }
+    .reference-controls {
+      position: fixed; right: 14px; bottom: 14px; z-index: 70; width: min(320px, calc(100vw - 28px));
+      border: 1px solid #858b92; border-radius: 12px; background: white; box-shadow: var(--shadow); font-size: 13px;
+    }
+    .controls-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    .controls-head strong { font-size: 12px; letter-spacing: .06em; }
+    .controls-toggle { min-width: 44px; min-height: 44px; border: 1px solid var(--line); border-radius: 8px; background: white; cursor: pointer; }
+    .controls-body { display: grid; gap: 12px; padding: 12px; }
+    .reference-controls.collapsed .controls-body { display: none; }
+    .control-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+    .control-row button { min-height: 44px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: white; cursor: pointer; }
+    .control-row button[aria-pressed="true"] { background: var(--ink); color: white; }
+    .toast { position: fixed; left: 50%; bottom: 22px; z-index: 120; transform: translate(-50%, 150%); max-width: calc(100vw - 30px); padding: 12px 16px; border-radius: 10px; background: var(--ink); color: white; box-shadow: var(--shadow); transition: transform .2s ease; }
+    .toast.show { transform: translate(-50%, 0); }
+    @media (max-width: 1100px) {
+      .desktop-nav a:not(.button) { display: none; }
+      .domain-grid { grid-template-columns: repeat(4, 1fr); }
+      .footer-top { grid-template-columns: 4fr 2fr 2fr; }
+    }
+    @media (max-width: 820px) {
+      .shell { width: min(calc(100% - 32px), var(--content)); }
+      .desktop-nav { display: none; }
+      .menu-button { display: inline-grid; place-items: center; }
+      .hero { min-height: auto; grid-template-columns: 1fr; padding-block: 66px; }
+      .signature-zone { min-height: 330px; }
+      .trust-list { grid-template-columns: repeat(2, 1fr); }
+      .feature-grid, .steps { grid-template-columns: repeat(2, 1fr); }
+      .domain-grid { grid-template-columns: repeat(2, 1fr); }
+      .report-wrap, .pilot-layout { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 520px) {
+      .shell { width: min(calc(100% - 24px), var(--content)); }
+      .header-row { min-height: 68px; }
+      .brand small { display: none; }
+      .section-pad, .pilot { padding-block: 68px; }
+      .hero { gap: 34px; padding-block: 54px; }
+      .hero-actions { display: grid; }
+      .trust-list, .feature-grid, .domain-grid, .steps, .footer-top { grid-template-columns: 1fr; }
+      .trust-item { min-height: 66px; }
+      .domain-card, .feature-card, .step { min-height: auto; }
+      .reference-controls { right: 8px; bottom: 8px; width: calc(100vw - 16px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+    @media print {
+      .reference-controls, .toast, .menu-button, .mobile-layer { display: none !important; }
+      .site-header.is-sticky { position: relative; box-shadow: none; }
+    }
+  </style>
+</head>
+<body data-screen-id="PUB-01" data-authority="C-03,C-04,C-05,C-08" data-final-visual-authority="false">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="reference-banner">PUB-01 FUNCTIONAL REFERENCE · NOT FINAL VISUAL DESIGN · VERSION 1.0.1 CORRECTED</div>
+
+  <div class="reference-authority" role="note">
+    <strong>CONTROLLED AUTHORITY:</strong>
+    This HTML controls approved PUB-01 content, required zones, routes, interaction states and accessibility behavior.
+    Its CSS values, geometry and rendered appearance exist only to make the functional reference usable and are not final
+    design tokens or a Golden Screen acceptance baseline. Final visual authority is the ROOTS-AI Visual Direction →
+    written-approved PUB-01 Golden Screen in a ROOTS-owned editable Figma workspace/file → approved downstream design system/screens.
+  </div>
+
+
+  <header class="site-header zone" data-zone="PUB01-Z01" data-authority="C-04 v1.0.1,C-05 v1.0.1">
+    <span class="zone-label">PUB01-Z01 · HEADER</span>
+    <div class="shell header-row">
+      <a class="brand route-link" href="/" data-route="/" data-asset-binding="BR-WORD-001">ROOTS-AI™ <small>REFERENCE WORDMARK</small></a>
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a class="route-link" href="/how-it-works" data-route="/how-it-works">How It Works</a>
+        <a class="route-link" href="/platform" data-route="/platform">Platform</a>
+        <a class="route-link" href="/research" data-route="/research">Research</a>
+        <a class="route-link" href="/healthcare-professionals" data-route="/healthcare-professionals">Healthcare Professionals</a>
+        <a class="route-link" href="/example-report" data-route="/example-report">Example Report</a>
+        <a class="button compact route-link" href="/assessment/start" data-route="/assessment/start">Start Your Assessment</a>
+      </nav>
+      <button class="menu-button" type="button" aria-label="Open navigation" aria-controls="mobile-navigation" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <div class="mobile-layer" id="mobile-navigation" aria-hidden="true">
+    <button class="mobile-scrim" type="button" aria-label="Close navigation"></button>
+    <aside class="mobile-panel" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+      <div class="mobile-panel-head"><strong>ROOTS-AI™</strong><button class="close-menu" type="button" aria-label="Close navigation">×</button></div>
+      <nav class="mobile-nav" aria-label="Mobile primary navigation">
+        <a class="route-link" href="/" data-route="/">Home</a>
+        <a class="route-link" href="/how-it-works" data-route="/how-it-works">How It Works</a>
+        <a class="route-link" href="/platform" data-route="/platform">Platform</a>
+        <a class="route-link" href="/research" data-route="/research">Research</a>
+        <a class="route-link" href="/healthcare-professionals" data-route="/healthcare-professionals">Healthcare Professionals</a>
+        <a class="route-link" href="/example-report" data-route="/example-report">Example Report</a>
+        <a class="route-link" href="/about" data-route="/about">About</a>
+        <a class="button route-link" href="/assessment/start" data-route="/assessment/start">Start Your Assessment</a>
+      </nav>
+    </aside>
+  </div>
+
+  <main id="main">
+    <section class="zone" data-zone="PUB01-Z02" data-authority="C-04 v1.0.1,C-05 v1.0.1">
+      <span class="zone-label">PUB01-Z02 · HERO</span>
+      <div class="shell hero">
+        <div>
+          <p class="eyebrow">Biological Intelligence Platform</p>
+          <h1>Decode the Biology Before You Fight the Weight</h1>
+          <p class="lead">ROOTS-AI™ turns a structured assessment into a governed biological intelligence report—helping you understand patterns in metabolism, hunger, sleep, circadian timing, stress, inflammation-related signals and perceived biological resistance.</p>
+          <div class="hero-actions">
+            <a class="button route-link" href="/assessment/start" data-route="/assessment/start">Start Your Assessment</a>
+            <a class="button secondary route-link" href="/example-report" data-route="/example-report">View Example Report</a>
+          </div>
+        </div>
+        <div class="signature-zone" data-asset-binding="PUB01-SIGNATURE-01" aria-label="Required vendor signature visual design zone">
+          <strong>Vendor design zone: create an original ROOTS-AI™ signature expression of Biological Intelligence.</strong>
+          <div class="signature-orbit" aria-hidden="true"></div>
+          <p class="signature-note">Functional placeholder only. Do not reproduce this geometry as the final design.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="zone" data-zone="PUB01-Z03" data-authority="C-04 v1.0.1,C-05 v1.0.1" aria-label="Trust principles">
+      <span class="zone-label">PUB01-Z03 · TRUST STRIP</span>
+      <div class="trust-list">
+        <div class="trust-item">Educational, not diagnostic</div>
+        <div class="trust-item">Deterministic scoring</div>
+        <div class="trust-item">Governed AI explanation</div>
+        <div class="trust-item">Private by design</div>
+      </div>
+    </section>
+
+    <section class="zone" data-zone="PUB01-Z04" data-authority="C-04 v1.0.1,C-05 v1.0.1">
+      <span class="zone-label">PUB01-Z04 · SIX FEATURES</span>
+      <div class="shell section-pad">
+        <div class="section-head"><p class="eyebrow">What changes</p><h2>A connected view of the patterns behind the struggle</h2></div>
+        <div class="grid feature-grid">
+          <article class="card feature-card"><h3>Beyond a number on the scale</h3><p>See the pattern behind the struggle.</p></article>
+          <article class="card feature-card"><h3>Seven biological domains</h3><p>One connected view.</p></article>
+          <article class="card feature-card"><h3>Deterministic scores</h3><p>AI assists with governed explanation only; C-02/C-03 v1.0.1 deterministic outputs remain authoritative for calculation, classification, drivers and null states.</p></article>
+          <article class="card feature-card"><h3>Your report</h3><p>19 transparent sections with your answers and limitations.</p></article>
+          <article class="card feature-card"><h3>Private by design</h3><p>Controlled access, versioning and audit.</p></article>
+          <article class="card feature-card"><h3>Educational, not diagnostic</h3><p>Designed to support informed conversations and realistic next steps.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="zone soft-section" data-zone="PUB01-Z05" data-authority="C-03,C-05">
+      <span class="zone-label">PUB01-Z05 · SEVEN DOMAINS</span>
+      <div class="shell section-pad">
+        <div class="section-head"><p class="eyebrow">Seven connected domains</p><h2>One biological intelligence framework</h2></div>
+        <div class="grid domain-grid">
+          <article class="card domain-card"><span class="domain-code">MR</span><h3>Metabolic Resistance™</h3><p>Self-reported resistance to expected weight change and activity-related metabolic context.</p></article>
+          <article class="card domain-card"><span class="domain-code">HS</span><h3>Hunger &amp; Satiety Signals™</h3><p>Hunger, craving, fullness and post-meal response patterns.</p></article>
+          <article class="card domain-card"><span class="domain-code">SR</span><h3>Sleep Recovery Index™</h3><p>Sleep duration, continuity and perceived restoration.</p></article>
+          <article class="card domain-card"><span class="domain-code">CH</span><h3>Circadian Health Score™</h3><p>Alignment of light, screen, meal and sleep timing.</p></article>
+          <article class="card domain-card"><span class="domain-code">SL</span><h3>Stress Load™</h3><p>Perceived tension, cognitive activation and stress-linked eating.</p></article>
+          <article class="card domain-card"><span class="domain-code">IB</span><h3>Inflammation Burden Index™</h3><p>Non-specific symptom burden; not a laboratory or clinical inflammation measure.</p></article>
+          <article class="card domain-card"><span class="domain-code">BS</span><h3>Biological Safety Signals™</h3><p>Perceived energy, appetite drive and resistance signals.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="zone" data-zone="PUB01-Z06" data-authority="C-04 v1.0.1,C-05 v1.0.1">
+      <span class="zone-label">PUB01-Z06 · HOW IT WORKS</span>
+      <div class="shell section-pad">
+        <div class="section-head"><p class="eyebrow">How it works</p><h2>From structured answers to governed explanation</h2></div>
+        <div class="grid steps">
+          <article class="card step"><h3>Assess</h3><p>Complete the structured 73-question assessment.</p></article>
+          <article class="card step"><h3>Validate</h3><p>Approved responses are normalized. Approved N/A responses are preserved only where C-01 v1.0.1 permits them; required multi-select responses cannot be empty, NONE/N/A is exclusive where provided, and Q73 does not permit N/A.</p></article>
+          <article class="card step"><h3>Analyse</h3><p>C-02 v1.0.1 deterministic rules calculate seven domains and derived indicators, then select canonical drivers, confidence and eligible content. AI cannot change scores, classifications, drivers or null states.</p></article>
+          <article class="card step"><h3>Explain &amp; Render</h3><p>Governed AI turns approved explanation objects into clear language; web and PDF reports are produced from the same immutable report.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="zone soft-section" data-zone="PUB01-Z07" data-authority="C-03 v1.0.1,C-04 v1.0.1,C-05 v1.0.1">
+      <span class="zone-label">PUB01-Z07 · EXAMPLE REPORT TEASER</span>
+      <div class="shell section-pad report-wrap">
+        <div>
+          <p class="eyebrow">Example report</p>
+          <h2>See the state, drivers and boundaries clearly</h2>
+          <p class="lead">The preview uses approved sample values and demonstrates the required loaded, loading and error states. Production rendering must support C-02/C-03 v1.0.1 canonical zero-to-three driver output entries, a co-primary pair as one entry, and reduced/Not Available states without invented filler.</p>
+          <a class="button secondary route-link" href="/example-report" data-route="/example-report">View Example Report</a>
+        </div>
+        <div class="report-shell" data-asset-binding="PUB01-REPORT-01" aria-live="polite">
+          <div class="report-state active" data-report-state="loaded" data-sample-only="true" aria-label="Approved sample report; production driver count is dynamic">
+            <div class="score-row"><div><small>Biological State</small><div class="score">61<small>/100</small></div></div><span class="state-label">Strained</span></div>
+            <div class="driver"><div class="driver-line"><span>Stress Load</span><span>75</span></div><div class="track"><span style="width:75%"></span></div></div>
+            <div class="driver"><div class="driver-line"><span>Sleep Recovery</span><span>68</span></div><div class="track"><span style="width:68%"></span></div></div>
+            <div class="driver"><div class="driver-line"><span>Metabolic Resistance</span><span>62</span></div><div class="track"><span style="width:62%"></span></div></div>
+            <p class="boundary">This is a questionnaire summary, not a medical risk probability.</p>
+          </div>
+          <div class="report-state" data-report-state="loading" role="status"><h3>Preparing example report</h3><div class="skeleton short"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><p>No score is shown until approved sample data is available.</p></div>
+          <div class="report-state" data-report-state="error"><div class="error-box"><div><h3>Example report unavailable</h3><p>The reference could not load this state safely.</p><button class="button report-retry" type="button">Retry</button></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zone" data-zone="PUB01-Z08" data-authority="C-04 v1.0.1,C-05 v1.0.1">
+      <span class="zone-label">PUB01-Z08 · PILOT CTA</span>
+      <div class="shell pilot pilot-layout">
+        <div><p class="eyebrow">Pilot program</p><h2>Join the ROOTS-AI™ Free Beta</h2><p class="lead">The beta explores whether a structured, non-diagnostic assessment can help people understand self-reported patterns involving weight resistance, energy, sleep, stress and appetite.</p><a class="button route-link" href="/pilot" data-route="/pilot">Check Eligibility</a></div>
+        <ul class="conditions">
+          <li>Adults aged 18 and over.</li>
+          <li>Participation is voluntary and withdrawal is permitted.</li>
+          <li>The experience is educational and does not provide medical care.</li>
+          <li>Usability feedback and any research participation require separate consent.</li>
+          <li>No payment is required for the approved beta cohort.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer zone" data-zone="PUB01-Z09" data-authority="C-04 v1.0.1,C-05 v1.0.1">
+    <span class="zone-label">PUB01-Z09 · FOOTER</span>
+    <div class="shell">
+      <div class="footer-top">
+        <div><a class="brand route-link" href="/" data-route="/">ROOTS-AI™</a><p class="footer-boundary">ROOTS-AI™ provides educational wellness information and does not diagnose or treat medical conditions.</p><a class="button route-link" href="/assessment/start" data-route="/assessment/start">Start Your Assessment</a></div>
+        <nav class="footer-col" aria-label="Product links"><h3>Product</h3><a class="route-link" href="/assessment/start" data-route="/assessment/start">Assessment</a><a class="route-link" href="/example-report" data-route="/example-report">Example Report</a><a class="route-link" href="/how-it-works" data-route="/how-it-works">How It Works</a><a class="route-link" href="/platform" data-route="/platform">Platform</a></nav>
+        <nav class="footer-col" aria-label="Company links"><h3>Company</h3><a class="route-link" href="/about" data-route="/about">About</a><a class="route-link" href="/research" data-route="/research">Research</a><a class="route-link" href="/healthcare-professionals" data-route="/healthcare-professionals">Healthcare Professionals</a><a class="route-link" href="/pilot" data-route="/pilot">Pilot Program</a><a class="route-link" href="/contact" data-route="/contact">Contact</a><a class="route-link" href="/blog" data-route="/blog">Blog</a></nav>
+        <nav class="footer-col" aria-label="Legal links"><h3>Legal</h3><a class="route-link" href="/privacy" data-route="/privacy">Privacy</a><a class="route-link" href="/terms" data-route="/terms">Terms</a><a class="route-link" href="/cookies" data-route="/cookies">Cookies</a><a class="route-link" href="/medical-disclaimer" data-route="/medical-disclaimer">Medical Disclaimer</a><a class="route-link" href="/ai-disclaimer" data-route="/ai-disclaimer">AI Disclaimer</a></nav>
+      </div>
+      <div class="footer-bottom">© 2026 ROOTS AI HEALTH SYSTEMS, Inc. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <aside class="reference-controls" aria-label="Functional reference controls">
+    <div class="controls-head"><strong>REFERENCE CONTROLS</strong><button class="controls-toggle" type="button" aria-expanded="true" aria-label="Collapse reference controls">−</button></div>
+    <div class="controls-body">
+      <div class="control-row"><span>Viewport</span><strong id="viewport-value">—</strong></div>
+      <div class="control-row"><span>Zone labels</span><button id="zone-toggle" type="button" aria-pressed="false">Show</button></div>
+      <div class="control-row"><span>Report state</span><span><button type="button" data-state-button="loaded" aria-pressed="true">Loaded</button> <button type="button" data-state-button="loading" aria-pressed="false">Loading</button> <button type="button" data-state-button="error" aria-pressed="false">Error</button></span></div>
+    </div>
+  </aside>
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const body = document.body;
+      const header = document.querySelector('.site-header');
+      const menuButton = document.querySelector('.menu-button');
+      const mobileLayer = document.querySelector('.mobile-layer');
+      const mobilePanel = document.querySelector('.mobile-panel');
+      const closeButtons = document.querySelectorAll('.close-menu, .mobile-scrim');
+      const toast = document.querySelector('.toast');
+      let toastTimer;
+
+      const announceRoute = (route) => {
+        toast.textContent = `Controlled route: ${route}`;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+      };
+
+      // FUNCTIONAL REFERENCE ONLY:
+      // Navigation is intentionally intercepted in this standalone reference so reviewers can inspect controlled routes
+      // without leaving the file. Production implementation MUST navigate to the actual approved routes.
+      document.querySelectorAll('.route-link').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          announceRoute(link.dataset.route || link.getAttribute('href'));
+          closeMenu();
+        });
+      });
+
+      const openMenu = () => {
+        body.classList.add('menu-open');
+        mobileLayer.classList.add('open');
+        mobileLayer.setAttribute('aria-hidden', 'false');
+        menuButton.setAttribute('aria-expanded', 'true');
+        mobilePanel.querySelector('a, button').focus();
+      };
+
+      const closeMenu = () => {
+        if (!mobileLayer.classList.contains('open')) return;
+        body.classList.remove('menu-open');
+        mobileLayer.classList.remove('open');
+        mobileLayer.setAttribute('aria-hidden', 'true');
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.focus();
+      };
+
+      menuButton.addEventListener('click', openMenu);
+      closeButtons.forEach((button) => button.addEventListener('click', closeMenu));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeMenu();
+        if (event.key === 'Tab' && mobileLayer.classList.contains('open')) {
+          const focusable = [...mobilePanel.querySelectorAll('a[href], button:not([disabled])')];
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+          if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+        }
+      });
+      window.addEventListener('scroll', () => header.classList.toggle('is-sticky', window.scrollY > 80), { passive: true });
+
+      const zoneToggle = document.querySelector('#zone-toggle');
+      zoneToggle.addEventListener('click', () => {
+        const active = body.classList.toggle('show-zones');
+        zoneToggle.setAttribute('aria-pressed', String(active));
+        zoneToggle.textContent = active ? 'Hide' : 'Show';
+      });
+
+      const setReportState = (state) => {
+        document.querySelectorAll('[data-report-state]').forEach((panel) => panel.classList.toggle('active', panel.dataset.reportState === state));
+        document.querySelectorAll('[data-state-button]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.stateButton === state)));
+      };
+      document.querySelectorAll('[data-state-button]').forEach((button) => button.addEventListener('click', () => setReportState(button.dataset.stateButton)));
+      document.querySelector('.report-retry').addEventListener('click', () => setReportState('loaded'));
+
+      const controls = document.querySelector('.reference-controls');
+      const controlsToggle = document.querySelector('.controls-toggle');
+      controlsToggle.addEventListener('click', () => {
+        const collapsed = controls.classList.toggle('collapsed');
+        controlsToggle.setAttribute('aria-expanded', String(!collapsed));
+        controlsToggle.setAttribute('aria-label', collapsed ? 'Expand reference controls' : 'Collapse reference controls');
+        controlsToggle.textContent = collapsed ? '+' : '−';
+      });
+
+      const viewportValue = document.querySelector('#viewport-value');
+      const updateViewport = () => { viewportValue.textContent = `${window.innerWidth}px`; };
+      updateViewport();
+      window.addEventListener('resize', updateViewport, { passive: true });
+    })();
+  </script>
+</body>
+</html>

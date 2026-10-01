@@ -47,6 +47,17 @@ export const Pub01GoldenScreen: React.FC = () => (
       <section id="pilot" className="px-5 py-24 sm:px-8 lg:py-28"><div className="mx-auto max-w-[1280px] rounded-xl border border-[#D8DEE8] bg-white p-8 sm:p-12"><p className="text-sm font-bold uppercase tracking-wide text-[#2A4060]">Pilot program</p><h2 className="mt-5 text-4xl font-bold text-[#1A2A4A] sm:text-5xl">Join the ROOTS-AI™ Free Beta</h2><p className="mt-6 max-w-2xl text-lg leading-7 text-[#6B7280]">The beta explores whether a structured, non-diagnostic assessment can help people understand self-reported patterns involving weight resistance, energy, sleep, stress and appetite.</p><ul className="mt-8 max-w-2xl list-disc space-y-2 pl-5 text-lg text-[#6B7280]"><li>Adults aged 18 and over.</li><li>Participation is voluntary and withdrawal is permitted.</li><li>The experience is educational and does not provide medical care.</li><li>Usability feedback and research participation require separate consent.</li><li>No payment is required for the approved beta cohort.</li></ul><a href="/pilot" className="mt-10 inline-flex min-h-11 items-center rounded-lg bg-[#1A2A4A] px-6 text-sm font-bold text-white">Check Eligibility</a></div></section>
 
       <section className="bg-[#1A2A4A] px-5 py-24 text-white sm:px-8 lg:py-28"><div className="mx-auto max-w-[1280px]"><p className="text-sm font-bold uppercase tracking-wide text-[#D4AD55]">A clearer start</p><h2 className="mt-5 max-w-3xl text-5xl font-bold leading-tight sm:text-6xl">Understand your signals.<br />Choose your next step.</h2><a href="/assessment" className="mt-10 inline-flex min-h-11 items-center rounded-lg bg-[#D4AD55] px-6 text-sm font-bold text-[#1A2A4A]">Start Your Assessment</a></div></section>
+      <section aria-labelledby="triad-title" className="border-y border-[#E5E7EB] bg-white px-5 py-16 sm:px-8">
+        <div className="mx-auto max-w-[1280px]">
+          <h2 id="triad-title" className="text-3xl font-bold text-[#1A2A4A]">Biological Triad</h2>
+          <p className="mt-3 text-lg text-[#437971]">The diagram brings together relevant domains and contextual factors; it does not establish causes.</p>
+          <ul className="mt-6 grid gap-4 sm:grid-cols-3" aria-label="Biological Triad legend">
+            <li className="rounded-lg border-[#D8DEE8] p-4"><strong>Driver</strong><span className="sr-only">: a highest-ranked eligible domain</span><p className="mt-1 text-[#437971]">Highest-ranked eligible domain</p></li>
+            <li className="rounded-lg border-[#D8DEE8] p-4"><strong>Protective factor</strong><span className="sr-only">: approved contextual factor</span><p className="mt-1 text-[#437971]">Approved contextual factor</p></li>
+            <li className="rounded-lg border-[#D8DEE8] p-4"><strong>Not available</strong><span className="sr-only">: insufficient information</span><p className="mt-1 text-[#437971]">Insufficient information</p></li>
+          </ul>
+        </div>
+      </section>
     </main>
 
     <PublicFooter />

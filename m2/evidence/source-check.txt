@@ -1,0 +1,7 @@
+ROOTS-AI M2 — canonical data vs controlled workbooks
+Command: python scripts/canonical/generate.py --check
+canonical JSON matches the controlled workbooks
+
+Workbook SHA-256:
+8c9c9e601d882e0f694c43a6c5d6cc5be5c8007f870283da7804ce3d32b7444c *docs/controlled-sources/02_ROOTS_AI_C01_Canonical_Question_Bank_v1.0.1_CORRECTED.xlsx
+12dc3a66a68c4afa9497101959408984ba653b3bb6a099624502429f1e66a028 *docs/controlled-sources/03_ROOTS_AI_C02_Canonical_Scoring_Rules_and_Golden_Tests_v1.0.1_CORRECTED.xlsx

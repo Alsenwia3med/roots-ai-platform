@@ -8,7 +8,14 @@
     "build": "next build",
     "start": "next start",
     "test": "jest",
-    "test:scoring": "jest --runInBand tests/assessment/scoring.test.ts"
+    "test:scoring": "jest --runInBand tests/assessment/scoring.test.ts",
+    "test:vitest": "vitest run",
+    "db:verify": "node scripts/m3-db-verify.mjs",
+    "db:probes": "node scripts/m3-db-probes.mjs",
+    "evidence:coverage": "vitest run --coverage",
+    "check:a11y": "node scripts/m3-a11y-check.mjs",
+    "check:parity": "node scripts/m3-parity-check.mjs",
+    "evidence:ai": "vitest run tests/ai/governance.test.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -21,11 +28,13 @@
     "@types/jest": "^29.0.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
+    "@vitest/coverage-v8": "^2.1.9",
     "autoprefixer": "^10.0.0",
     "jest": "^29.0.0",
     "postcss": "^8.0.0",
     "tailwindcss": "^3.3.0",
     "ts-jest": "^29.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^2.1.9"
   }
 }

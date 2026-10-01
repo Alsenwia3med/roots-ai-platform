@@ -1,0 +1,17 @@
+Subject: ROOTS-AI™ M3 — Final Corrected Single Controlled Handoff
+
+Hi Rahul,
+
+Please use the attached consolidated package as the single file handoff for M3. It contains the original 16-item v1.4 controlled baseline unchanged, the complete 35-point final report review, and the editable C-07 working derivative. Read 00_READ_FIRST.txt and verify the original baseline SHA-256 manifest before implementation. The original controlled sources remain authoritative.
+
+VISUAL IMPLEMENTATION: The approved visual and functional decisions are not being reopened. Implement File 14, C-05, C-08, PUB-01 functional reference, the 192 functional wireframes and the File 00 precedence rules faithfully. Your team is responsible for creating the ROOTS-owned editable Figma design system, PUB-01 Golden Screen and coded implementation. Our written Golden Screen approval is a check of conformity to the approved references, not an invitation for an independent redesign. Submit the required 1440px and 360px PUB-01 versions for written approval before downstream visual finalization under the controlled gate. Do not substitute new colours, fonts, screen structures or content. If a precise final aesthetic detail is not specified by the controlled materials, identify the exact source gap and ask rather than improvise. The functional wireframes are not themselves final aesthetic approval.
+
+REPORT: Implement all directly actionable items in the enclosed 35-point review. Verify conditional items against the controlled source first and identify any exact unresolved source gap. Do not alter C-01/C-02, deterministic scoring, Golden Test outputs, canonical section IDs, governed content or AI boundaries. Deliver the corrected 19-section report and the requested ten verification checks together, including canonical-object web/PDF parity.
+
+ACCESS: AI and Google OAuth access have already been provided securely. Please test the integrations and report only a specific actual technical blocker. No credentials are included in this ZIP.
+
+Return one integrated M3 RC and consolidated evidence, rather than incremental revisions. Please confirm receipt and checksum verification in one response.
+
+Best regards,
+Dr. Nour Holly
+ROOTS-AI™

@@ -9,3 +9,12 @@ node_modules
 # TypeScript build info (generated)
 tsconfig.tsbuildinfo
 
+# Test/build evidence generated locally
+coverage/
+*.log
+
+# Local probes and temporary dumps
+.dump*.txt
+.probe.mjs
+.phaseA-probe2.mjs
+
