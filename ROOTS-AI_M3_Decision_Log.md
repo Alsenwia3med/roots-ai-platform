@@ -200,6 +200,69 @@ only optional category.
 
 ---
 
+## D-06 — Controlled-source provenance conflict (C-01/C-02) — **BLOCKING**
+
+**Decision taken 1 October 2026: M3 is held.** ROOTS direction was requested before
+resolving this, and the recommendation is to escalate to the controlled-workbook author as a
+possible mis-delivery. Nothing in this entry changes a controlled source, a transcribed table,
+or a hash.
+
+### What was found
+
+Two different pairs of workbooks are present under the **same filenames**, and the repository
+records both.
+
+| | M2 evidence pack (`m2/evidence/`) | This checkout (transcribed) |
+|---|---|---|
+| C-01 sha256 | `8c9c9e601d882e0f694c43a6c5d6cc5be5c8007f870283da7804ce3d32b7444c` | `b5bb50ded8a21ec957d17f55c9b2b03c4845ad56d850549cb997bff4bfdd354b` |
+| C-02 sha256 | `12dc3a66a68c4afa9497101959408984ba653b3bb6a099624502429f1e66a028` | `14bf61735d0abe42da7ea87c5dd988dcceecdd648b94a68137b18a65f978989e` |
+| C-01 `questionnaire_version` | **1.0.0** | 1.0.1 |
+| Path referenced by the evidence | `docs/controlled-sources/` — **does not exist** | `controlled-sources/` |
+
+The two evidence-pack hashes are **byte-identical** to a copy of both workbooks held outside the
+repository. Those files carry filenames ending `_v1.0.1_CORRECTED.xlsx` while declaring
+`questionnaire_version = 1.0.0` internally. `m2/evidence/golden-tests.json` preserves the
+contradiction verbatim, pairing `"label": "C-01 v1.0.1 CORRECTED"` with
+`"questionnaire_version": "1.0.0"`.
+
+### Why it blocks M3
+
+Substituting the evidence-pair workbooks into `controlled-sources/` and running
+`npm run build:controlled` **refused to emit anything**, reporting 75 violations, all of one
+shape:
+
+```
+- C-01 README control 'questionnaire_version': expected "1.0.1", found "1.0.0"
+- C-01 Q1..Q73: questionnaire_version "1.0.0" is not 1.0.1
+- C-01 README control 'Scoring source': expected "C-02 v1.0.1", found "C-02 v1.0.0"
+No file was written. Fix the source or the reader; do not hand-edit the output.
+```
+
+The consequence is evidential, not cosmetic: the **30/30 Golden Tests, the 50/50 API negative
+tests and the live database security results were produced against a different pair of
+controlled sources than the ones this build transcribes and ships.** The evidence pack also
+records `"commit": "not yet committed — record the ROOTS GitHub commit this report is run from"`,
+so it is not tied to a commit either. Until the authoritative pair is confirmed, those results
+cannot be cited as certifying the current build.
+
+### ROOTS direction requested
+
+1. Which pair is authoritative for M3 — the `b5bb50de` / `14bf6173` pair that declares 1.0.1, or
+   the `8c9c9e60` / `12dc3a66` pair that declares 1.0.0?
+2. Is the filename (`_v1.0.1_CORRECTED_`) or the in-workbook `questionnaire_version` the
+   version of record when they disagree?
+3. Should the M2 evidence be regenerated against the confirmed pair, or is the discrepancy
+   explained by a known re-export?
+4. May the stale `m2/evidence/` hashes be corrected once the authoritative pair is confirmed?
+
+### Handling while held
+
+The repository was left untouched by this investigation. The substitution test was run against
+a backup and fully reverted; `controlled-sources/` hashes re-verified equal to
+`CONTROLLED_C01.packageSha256` and `CONTROLLED_C02.packageSha256`, and `git status` is clean.
+**No controlled source, table or hash was altered.**
+
+---
 ## Verification state
 
 | Item | Verified | Open |
@@ -209,3 +272,4 @@ only optional category.
 | D-03 footer | Line removed; C-04 footer intact | — |
 | D-04 wording | Applied; co-primary corrected; 80 report tests pass | C-03 state and content-rule verification |
 | D-05 consent | Structure and mapping recorded; 8 tests pass | Region, history and evidential gaps (a)–(c) |
+| **D-06 provenance** | Conflict reproduced and reverted; repo hashes re-verified against `CONTROLLED_C01/C02` | **BLOCKING — M3 held.** M2 evidence cites a different workbook pair than the build ships. Awaiting ROOTS confirmation of the authoritative pair |
