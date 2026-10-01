@@ -22,38 +22,34 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next({ request });
   }
 
-  let supabaseResponse = NextResponse.next({ request });
+  try {
+    let supabaseResponse = NextResponse.next({ request });
 
-  const supabase = createServerClient(url, anonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
+    const supabase = createServerClient(url, anonKey, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet, headersToSet) {
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value);
+          });
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) => {
+            supabaseResponse.cookies.set(name, value, options);
+          });
+          Object.entries(headersToSet).forEach(([key, value]) => {
+            supabaseResponse.headers.set(key, value);
+          });
+        },
       },
-      setAll(cookiesToSet, headersToSet) {
-        // 1. Mirror the new cookies onto the request so downstream Server
-        //    Components / Route Handlers created in this request see them.
-        cookiesToSet.forEach(({ name, value }) =>
-          request.cookies.set(name, value)
-        );
-        // 2. Recreate the response and persist the cookies on the client.
-        supabaseResponse = NextResponse.next({ request });
-        cookiesToSet.forEach(({ name, value, options }) =>
-          supabaseResponse.cookies.set(name, value, options)
-        );
-        // 3. Responses that set auth cookies must not be cached.
-        Object.entries(headersToSet).forEach(([key, value]) =>
-          supabaseResponse.headers.set(key, value)
-        );
-      },
-    },
-  });
+    });
 
-  // IMPORTANT: do not remove — without this call the client never loads the
-  // session from cookies, so expired tokens would never be refreshed (and
-  // setAll above would never run).
-  await supabase.auth.getClaims();
-
-  return supabaseResponse;
+    await supabase.auth.getClaims();
+    return supabaseResponse;
+  } catch {
+    return NextResponse.next({ request });
+  }
 }
 
 export const config = {
