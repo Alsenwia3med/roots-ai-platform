@@ -1,6 +1,6 @@
 import React from "react";
 
-import { AssessmentShell, totalModuleCount } from "./AssessmentShell";
+import { AssessmentShell } from "./AssessmentShell";
 import { QUESTION_BANK } from "../../lib/assessment/question-bank";
 
 /**
@@ -32,7 +32,7 @@ export function StartScreen() {
           What this assessment covers
         </h1>
         <p className="mt-4 text-base leading-7 text-[#4B5563]">
-          You will answer {questionCount} questions across {totalModuleCount()} modules about your
+          You will answer {questionCount} questions across {modules.length} modules about your
           sleep, hunger and fullness, weight history, energy, stress, daily timing, activity and
           current goals. Most people finish in about 20 minutes.
         </p>

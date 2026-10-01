@@ -6,7 +6,6 @@ import {
   AssessmentShell,
   ModuleIntro,
   ModuleProgressBar,
-  totalModuleCount,
 } from "./AssessmentShell";
 import { QuestionControl } from "./QuestionControl";
 import { SaveExitDialog } from "./SaveExitDialog";
@@ -72,9 +71,11 @@ export function ModuleShell({ session, moduleIndex }: { session: string; moduleI
 
   const question = questions[position];
 
-  // Called during render, not captured in a module-level const — see the note on
-  // totalModuleCount() in AssessmentShell.
-  const moduleCount = totalModuleCount();
+  // Read from the bank, not from AssessmentShell. lib/ is a plain module and is
+// imported by value on both sides of the client boundary; a value exported from
+// the "use client" shell arrives as a client reference instead. See the note on
+// CANONICAL_MODULES in AssessmentShell.
+const moduleCount = QUESTION_BANK.modules.length;
 
   // Restore a draft for THIS session only.
   useEffect(() => {

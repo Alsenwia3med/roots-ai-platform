@@ -143,15 +143,22 @@ export function ModuleIntro({ title, purpose }: { title: string; purpose: string
 export const ASSESSMENT_MODULES = QUESTION_BANK.modules;
 
 /**
- * Reads the module count at CALL time, not at module-evaluation time.
+ * Module count.
  *
- * A plain `export const TOTAL_MODULE_COUNT = QUESTION_BANK.modules.length`
- * is evaluated once, when the module is first imported. A Server Component
- * that imports it from a "use client" module receives a client-reference OBJECT
- * instead of the number, which silently produced `Module {}{} of {}{}` and made
- * every `moduleIndex <= TOTAL_MODULE_COUNT` guard false. Exporting a function and
- * calling it during render avoids that entirely.
+ * Deliberately NOT a module-level `const`, and deliberately NOT re-exported for
+ * Server Components to import. Both were tried and both broke:
+ *
+ *   const TOTAL = QUESTION_BANK.modules.length
+ *     -> a Server Component importing it from this "use client" module received a
+ *        client-reference OBJECT, not 13, so every guard failed and every module
+ *        rendered "That module does not exist".
+ *
+ *   function totalModuleCount() exported for a Server Component to call
+ *     -> arrived as {} and threw "is not a function" at render time (HTTP 500 on
+ *        /assessment/start).
+ *
+ * Any component that needs the count should read `QUESTION_BANK.modules.length`
+ * from lib/ directly. lib/ is a plain module, so it is imported by value on both
+ * sides of the boundary.
  */
-export function totalModuleCount(): number {
-  return QUESTION_BANK.modules.length;
-}
+export { ASSESSMENT_MODULES as CANONICAL_MODULES };
