@@ -145,7 +145,7 @@ export function ModuleShell({ session, moduleIndex }: { session: string; moduleI
       {/* Zone 1. */}
       <ModuleProgressBar
         moduleIndex={moduleIndex}
-        totalModules={TOTAL_MODULE_COUNT}
+        totalModules={moduleCount}
         percentComplete={percent}
       />
 
@@ -219,7 +219,7 @@ export function ModuleShell({ session, moduleIndex }: { session: string; moduleI
               >
                 Next
               </button>
-            ) : moduleIndex < TOTAL_MODULE_COUNT ? (
+            ) : moduleIndex < moduleCount ? (
               <a
                 href={`/assessment/${session}/module/${moduleIndex + 1}`}
                 className="inline-flex min-h-11 items-center rounded-lg bg-[#1A2A4A] px-5 text-sm font-semibold text-white hover:bg-[#24365C]"

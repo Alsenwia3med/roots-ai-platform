@@ -106,7 +106,24 @@ export function validateAnswer(
   const moduleIndex = question.moduleIndex;
   const value = record.value;
 
-  // 1. Status must agree with the value it claims to hold.
+  // 1. Q73 must never carry N/A, whatever the record claims. Checked FIRST so
+  // that forcing N/A onto the optional free-text question reports the precise
+  // FORCED_NA_ON_OPTIONAL_FREE_TEXT rule rather than the generic
+  // NA_NOT_AFFIRMATIVE: a text value can never be an approved N/A option, so the
+  // generic rule would otherwise mask the real problem.
+  if (
+    question.questionId === OPTIONAL_FREE_TEXT_QUESTION_ID &&
+    record.status === "explicit_na"
+  ) {
+    return {
+      valid: false,
+      failures: [
+        failure("FORCED_NA_ON_OPTIONAL_FREE_TEXT", question.questionId, moduleIndex),
+      ],
+    };
+  }
+
+  // 2. Status must agree with the value it claims to hold.
   if (record.status === "answered" && value === null) {
     return {
       valid: false,
@@ -121,24 +138,11 @@ export function validateAnswer(
     };
   }
 
-  // 2. N/A is only lawful where C-01 says so.
+  // 3. N/A is only lawful where C-01 says so.
   if (record.status === "explicit_na" && question.naPolicy === "not_permitted") {
     return {
       valid: false,
       failures: [failure("NA_NOT_PERMITTED", question.questionId, moduleIndex)],
-    };
-  }
-
-  // 3. Q73 must never carry N/A, whatever the record claims.
-  if (
-    question.questionId === OPTIONAL_FREE_TEXT_QUESTION_ID &&
-    record.status === "explicit_na"
-  ) {
-    return {
-      valid: false,
-      failures: [
-        failure("FORCED_NA_ON_OPTIONAL_FREE_TEXT", question.questionId, moduleIndex),
-      ],
     };
   }
 
