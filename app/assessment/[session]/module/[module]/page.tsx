@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import { ModuleShell } from "../../../../../components/assessment/ModuleShell";
 import { QUESTION_BANK } from "../../../../../lib/assessment/question-bank";
@@ -32,8 +33,11 @@ export default function ModulePage({
 }) {
   const parsed = Number(params.module);
   const moduleCount = QUESTION_BANK.modules.length;
-  const moduleIndex =
-    Number.isInteger(parsed) && parsed >= 1 && parsed <= moduleCount ? parsed : 0;
+  const inRange = Number.isInteger(parsed) && parsed >= 1 && parsed <= moduleCount;
+  // Out-of-range module numbers call notFound() so they return a real HTTP 404.
+  // Passing moduleIndex = 0 instead returned 200 with a rendered "That module does
+  // not exist" page: wrong status code, and it masked the missing screen.
+  if (!inRange) notFound();
 
-  return <ModuleShell session={params.session} moduleIndex={moduleIndex} />;
+  return <ModuleShell session={params.session} moduleIndex={parsed} />;
 }
