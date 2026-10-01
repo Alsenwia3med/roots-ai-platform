@@ -15,10 +15,11 @@ export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+  // Keep public pages available when Supabase variables are not configured
+  // (for example, during a preview deployment). Auth/session refresh is
+  // skipped until both public variables are supplied in the deployment.
   if (!url || !anonKey) {
-    throw new Error(
-      "Missing Supabase environment variables. NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be defined (see .env.local)."
-    );
+    return NextResponse.next({ request });
   }
 
   let supabaseResponse = NextResponse.next({ request });
