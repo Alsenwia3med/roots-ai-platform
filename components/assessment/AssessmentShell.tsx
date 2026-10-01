@@ -142,4 +142,16 @@ export function ModuleIntro({ title, purpose }: { title: string; purpose: string
 /** Canonical module list, so a screen never re-derives the order. */
 export const ASSESSMENT_MODULES = QUESTION_BANK.modules;
 
-export const TOTAL_MODULE_COUNT = QUESTION_BANK.modules.length;
+/**
+ * Reads the module count at CALL time, not at module-evaluation time.
+ *
+ * A plain `export const TOTAL_MODULE_COUNT = QUESTION_BANK.modules.length`
+ * is evaluated once, when the module is first imported. A Server Component
+ * that imports it from a "use client" module receives a client-reference OBJECT
+ * instead of the number, which silently produced `Module {}{} of {}{}` and made
+ * every `moduleIndex <= TOTAL_MODULE_COUNT` guard false. Exporting a function and
+ * calling it during render avoids that entirely.
+ */
+export function totalModuleCount(): number {
+  return QUESTION_BANK.modules.length;
+}
