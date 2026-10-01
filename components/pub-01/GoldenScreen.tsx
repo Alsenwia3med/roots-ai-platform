@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { PublicFooter } from "../../components/PublicFooter";
+import { MoreMenu } from "../public/MoreMenu";
 
 const domains = [
   ["HU", "Hunger & Appetite", "Signals · Reward · Eating behaviour", "#D97706"],
@@ -26,7 +27,7 @@ export const Pub01GoldenScreen: React.FC = () => (
     <header className="sticky top-0 z-50 h-[72px] bg-[#1A2A4A] text-white shadow-sm">
       <nav className="mx-auto flex h-full max-w-[1280px] items-center justify-between px-5 lg:px-8" aria-label="Public navigation">
         <a href="/" aria-label="ROOTS-AI home"><Image src="/assets/branding/logo.png" alt="ROOTS-AI" width={126} height={30} className="h-8 w-auto object-contain" priority /></a>
-        <div className="hidden items-center gap-8 text-sm font-medium md:flex"><a href="/how-it-works" className="min-h-11 inline-flex items-center hover:underline">How It Works</a><a href="/platform" className="min-h-11 inline-flex items-center hover:underline">Platform</a><a href="/example-report" className="min-h-11 inline-flex items-center hover:underline">Example Report</a><a href="/research" className="min-h-11 inline-flex items-center hover:underline">Research</a><a href="/pilot" className="min-h-11 inline-flex items-center hover:underline">About</a><button type="button" className="min-h-11">More</button></div>
+        <div className="hidden items-center gap-8 text-sm font-medium md:flex"><a href="/how-it-works" className="min-h-11 inline-flex items-center hover:underline">How It Works</a><a href="/platform" className="min-h-11 inline-flex items-center hover:underline">Platform</a><a href="/example-report" className="min-h-11 inline-flex items-center hover:underline">Example Report</a><a href="/research" className="min-h-11 inline-flex items-center hover:underline">Research</a><MoreMenu className="text-sm font-medium text-white" /></div>
         <a href="/assessment" className="inline-flex min-h-11 items-center rounded-lg bg-white px-5 text-sm font-bold text-[#1A2A4A] hover:bg-[#F3F4F6]">Start Your Assessment</a>
       </nav>
     </header>
