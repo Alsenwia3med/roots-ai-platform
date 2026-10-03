@@ -18,11 +18,14 @@
     "evidence:ai": "vitest run tests/ai/governance.test.ts"
   },
   "dependencies": {
+    "@react-three/drei": "^9.105.4",
+    "@react-three/fiber": "^8.16.8",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.2",
     "next": "^14.2.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "three": "^0.163.0"
   },
   "devDependencies": {
     "@types/jest": "^29.0.0",
