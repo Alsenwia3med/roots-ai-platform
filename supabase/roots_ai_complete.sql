@@ -91,7 +91,8 @@ $$;
 -- ============================================================================
 -- 1. profiles — participant identity mapped 1:1 to auth.users
 -- ============================================================================
-create table if not exists public.profiles (
+drop table if exists public.profiles cascade;
+create table public.profiles (
   user_id           uuid primary key,
   email             text not null,
   display_name      text,
@@ -116,25 +117,33 @@ create trigger profiles_set_updated_at
 
 
 -- M3 completion: operational relations and explicit AI least-privilege boundary.
-create table if not exists public.assessments (
+drop table if exists public.assessments cascade;
+drop table if exists public.responses cascade;
+drop table if exists public.scores cascade;
+drop table if exists public.reports cascade;
+drop table if exists public.audit_logs cascade;
+drop table if exists public.consents cascade;
+drop table if exists public.research_exports cascade;
+
+create table public.assessments (
   id uuid primary key default gen_random_uuid(), user_id uuid not null references public.profiles(user_id), questionnaire_version text not null, scoring_rules_version text not null, status text not null default 'draft', created_at timestamptz not null default now()
 );
-create table if not exists public.responses (
+create table public.responses (
   id uuid primary key default gen_random_uuid(), assessment_id uuid not null references public.assessments(id), question_id text not null, answer jsonb, created_at timestamptz not null default now(), unique (assessment_id, question_id)
 );
-create table if not exists public.scores (
+create table public.scores (
   id uuid primary key default gen_random_uuid(), assessment_id uuid not null unique references public.assessments(id), biological_state numeric, opportunity numeric, recovery_potential numeric, confidence numeric, drivers jsonb not null default '[]'::jsonb, trace jsonb not null default '{}'::jsonb, questionnaire_version text not null, scoring_rules_version text not null, created_at timestamptz not null default now()
 );
-create table if not exists public.reports (
+create table public.reports (
   id uuid primary key default gen_random_uuid(), assessment_id uuid not null unique references public.assessments(id), report_version text not null, narrative jsonb not null default '{}'::jsonb, created_at timestamptz not null default now()
 );
-create table if not exists public.audit_logs (
+create table public.audit_logs (
   id uuid primary key default gen_random_uuid(), assessment_id uuid references public.assessments(id), event_type text not null, metadata jsonb not null default '{}'::jsonb, created_at timestamptz not null default now()
 );
-create table if not exists public.consents (
+create table public.consents (
   id uuid primary key default gen_random_uuid(), user_id uuid references public.profiles(user_id), consent_type text not null, granted boolean not null, created_at timestamptz not null default now()
 );
-create table if not exists public.research_exports (
+create table public.research_exports (
   id uuid primary key default gen_random_uuid(), export_version text not null, payload jsonb not null default '{}'::jsonb, created_at timestamptz not null default now()
 );
 
@@ -170,5 +179,7 @@ revoke all privileges on all functions in schema public from roots_ai_narrative;
 grant usage on schema public to roots_ai_narrative;
 grant select on public.scores to roots_ai_narrative;
 revoke insert, update, delete, truncate, references, trigger on public.scores from roots_ai_narrative;
-revoke select on public.scores (trace) from roots_ai_narrative;
+-- Column-level revocation: first revoke all, then regrant select without trace
+revoke select on public.scores from roots_ai_narrative;
+grant select (id, assessment_id, biological_state, opportunity, recovery_potential, confidence, drivers, questionnaire_version, scoring_rules_version, created_at) on public.scores to roots_ai_narrative;
 revoke all privileges on public.responses, public.profiles, public.audit_logs, public.assessments, public.consents, public.reports, public.research_exports from roots_ai_narrative;
